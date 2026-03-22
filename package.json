@@ -1,0 +1,32 @@
+{
+  "name": "aegisPhish-lab",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "type": "module",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "check-types": "turbo check-types",
+    "dev:native": "turbo -F native dev",
+    "dev:web": "turbo -F web dev",
+    "dev:server": "turbo -F server dev",
+    "db:push": "turbo -F @aegisPhish-lab/db db:push",
+    "db:studio": "turbo -F @aegisPhish-lab/db db:studio",
+    "db:generate": "turbo -F @aegisPhish-lab/db db:generate",
+    "db:migrate": "turbo -F @aegisPhish-lab/db db:migrate"
+  },
+  "dependencies": {
+    "@aegisPhish-lab/env": "workspace:*",
+    "dotenv": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@aegisPhish-lab/config": "workspace:*",
+    "@types/bun": "catalog:",
+    "turbo": "^2.6.3",
+    "typescript": "^5"
+  }
+}

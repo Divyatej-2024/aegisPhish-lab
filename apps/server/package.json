@@ -1,0 +1,36 @@
+{
+  "name": "server",
+  "type": "module",
+  "scripts": {
+    "dev": "nitro dev",
+    "build": "nitro build",
+    "start": "node .output/server/index.mjs",
+    "check-types": "nitro prepare && tsc --noEmit"
+  },
+  "dependencies": {
+    "@aegisPhish-lab/auth": "workspace:*",
+    "@aegisPhish-lab/db": "workspace:*",
+    "@aegisPhish-lab/env": "workspace:*",
+    "@effect/platform": "catalog:",
+    "@effect/platform-bun": "^0.88.0",
+    "@effect/schema": "catalog:",
+    "@effect/sql": "^0.50.0",
+    "better-auth": "catalog:",
+    "dotenv": "catalog:",
+    "effect": "catalog:",
+    "h3": "^1.15.3",
+    "nitropack": "^2.11.12",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@aegisPhish-lab/config": "workspace:*",
+    "@effect/vitest": "catalog:",
+    "@types/bun": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
+    "@vitest/ui": "catalog:",
+    "jsdom": "catalog:",
+    "tsdown": "^0.16.5",
+    "typescript": "^5",
+    "vitest": "catalog:"
+  }
+}

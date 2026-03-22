@@ -1,0 +1,3 @@
+{
+  "extends": "@aegisPhish-lab/config/tsconfig.base.json"
+}

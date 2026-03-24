@@ -1,29 +1,55 @@
 import { Component } from "@angular/core";
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: "app-home",
   standalone: true,
+  imports: [RouterLink],
   template: `
-    <div class="container mx-auto max-w-3xl px-4 py-2">
-      <pre class="overflow-x-auto font-mono text-sm whitespace-pre"></pre>
-      <div class="grid gap-6 mt-6">
-        <section class="rounded-lg border border-gray-200 dark:border-gray-800 p-4">
-          <h2 class="mb-2 font-medium">Welcome to Angular</h2>
-          <p class="text-sm text-gray-600 dark:text-gray-400">
-            Angular is a platform and framework for building single-page client applications
-            using HTML and TypeScript. It implements core and optional functionality as a
-            set of TypeScript libraries that you import into your applications.
+    <div class="container mx-auto max-w-5xl px-4 py-10">
+      <div class="rounded-2xl border border-gray-200 dark:border-gray-800 p-6 md:p-10">
+        <h1 class="text-3xl font-semibold leading-tight">
+          AegisPhish Suite
+        </h1>
+        <p class="mt-3 max-w-2xl text-sm text-gray-600 dark:text-gray-400">
+          A full product suite for admins and end users. Manage security, billing, support,
+          analytics, and user experience in one place.
+        </p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a
+            class="rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800"
+            routerLink="/dashboard"
+          >
+            Go to Dashboard
+          </a>
+          <a
+            class="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:border-gray-400 hover:text-gray-900 dark:border-gray-700 dark:text-gray-300"
+            routerLink="/admin"
+          >
+            Admin Console
+          </a>
+        </div>
+      </div>
+
+      <div class="mt-8 grid gap-4 md:grid-cols-3">
+        <div class="rounded-lg border border-gray-200 dark:border-gray-800 p-4">
+          <h2 class="text-sm font-semibold">User Experience</h2>
+          <p class="mt-2 text-xs text-gray-600 dark:text-gray-400">
+            Dashboards, reports, billing, and support for end users.
           </p>
-        </section>
-        <section class="rounded-lg border border-gray-200 dark:border-gray-800 p-4">
-          <h2 class="mb-2 font-medium">Key Features</h2>
-          <ul class="list-disc list-inside text-sm text-gray-600 dark:text-gray-400 space-y-1">
-            <li>Standalone components - No NgModule required</li>
-            <li>Signals - Fine-grained reactivity</li>
-            <li>Built-in routing and forms</li>
-            <li>Dependency injection</li>
-          </ul>
-        </section>
+        </div>
+        <div class="rounded-lg border border-gray-200 dark:border-gray-800 p-4">
+          <h2 class="text-sm font-semibold">Admin Control</h2>
+          <p class="mt-2 text-xs text-gray-600 dark:text-gray-400">
+            Roles, permissions, audit visibility, and user management.
+          </p>
+        </div>
+        <div class="rounded-lg border border-gray-200 dark:border-gray-800 p-4">
+          <h2 class="text-sm font-semibold">Security Core</h2>
+          <p class="mt-2 text-xs text-gray-600 dark:text-gray-400">
+            MFA support, session management, and risk controls.
+          </p>
+        </div>
       </div>
     </div>
   `,

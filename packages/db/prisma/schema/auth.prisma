@@ -3,11 +3,17 @@ model User {
   name          String
   email         String
   emailVerified Boolean   @default(false)
+  twoFactorEnabled Boolean @default(false)
+  role          String   @default("user")
+  banned        Boolean  @default(false)
+  banReason     String?
+  banExpires    DateTime?
   image         String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
+  twoFactor     TwoFactor?
 
   @@unique([email])
   @@map("user")
@@ -21,6 +27,7 @@ model Session {
   updatedAt DateTime @updatedAt
   ipAddress String?
   userAgent String?
+  impersonatedBy String?
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -59,4 +66,16 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+model TwoFactor {
+  id          String   @id @map("_id")
+  userId      String   @unique
+  secret      String
+  backupCodes String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("twoFactor")
 }

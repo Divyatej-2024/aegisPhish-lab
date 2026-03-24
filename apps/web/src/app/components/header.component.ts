@@ -1,25 +1,67 @@
 import { Component } from "@angular/core";
+import { RouterLink, RouterLinkActive } from "@angular/router";
 
 @Component({
   selector: "app-header",
   standalone: true,
+  imports: [RouterLink, RouterLinkActive],
   template: `
-    <header class="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 px-4 py-3">
+    <header class="flex flex-wrap items-center justify-between gap-3 border-b border-gray-200 dark:border-gray-800 px-4 py-3">
       <div class="flex items-center gap-2">
-        <span class="font-semibold">Better Fullstack</span>
+        <span class="font-semibold">AegisPhish Suite</span>
+        <span class="rounded-full bg-gray-100 px-2 py-0.5 text-[10px] uppercase tracking-wide text-gray-600 dark:bg-gray-900 dark:text-gray-400">
+          full product
+        </span>
       </div>
-      <nav class="flex items-center gap-4">
-        <a href="https://github.com/Marve10s/Better-Fullstack"
-           target="_blank"
-           rel="noopener noreferrer"
-           class="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
-          GitHub
+      <nav class="flex flex-wrap items-center gap-3">
+        <a
+          routerLink="/"
+          routerLinkActive="text-gray-900 dark:text-gray-100"
+          class="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+        >
+          Home
         </a>
-        <a href="https://better-fullstack-web.vercel.app"
-           target="_blank"
-           rel="noopener noreferrer"
-           class="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
-          Docs
+        <a
+          routerLink="/dashboard"
+          routerLinkActive="text-gray-900 dark:text-gray-100"
+          class="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+        >
+          Dashboard
+        </a>
+        <a
+          routerLink="/reports"
+          routerLinkActive="text-gray-900 dark:text-gray-100"
+          class="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+        >
+          Reports
+        </a>
+        <a
+          routerLink="/billing"
+          routerLinkActive="text-gray-900 dark:text-gray-100"
+          class="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+        >
+          Billing
+        </a>
+        <a
+          routerLink="/support"
+          routerLinkActive="text-gray-900 dark:text-gray-100"
+          class="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+        >
+          Support
+        </a>
+        <a
+          routerLink="/settings"
+          routerLinkActive="text-gray-900 dark:text-gray-100"
+          class="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+        >
+          Settings
+        </a>
+        <a
+          routerLink="/admin"
+          routerLinkActive="text-gray-900 dark:text-gray-100"
+          class="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+        >
+          Admin
         </a>
       </nav>
     </header>

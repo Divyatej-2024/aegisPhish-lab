@@ -26,7 +26,7 @@ pnpm install
 This project uses MongoDB with Prisma.
 
 1. Make sure you have MongoDB set up.
-2. Update your `apps/server/.env` file with your MongoDB connection URI.
+2. Update your `backend/server/.env` file with your MongoDB connection URI.
 
 3. Apply the schema to your database:
 
@@ -47,13 +47,16 @@ The API is running at [http://localhost:3000](http://localhost:3000).
 
 ```
 aegisPhish-lab/
-├── apps/
-│   ├── web/         # Frontend application ()
-│   └── server/      # Backend API (Nitro)
-├── packages/
-│   ├── api/         # API layer / business logic
-│   ├── auth/        # Authentication configuration & logic
-│   └── db/          # Database schema & queries
+|-- frontend/
+|   |-- web/         # Frontend application (Angular)
+|-- backend/
+|   |-- server/      # Backend API (Nitro)
+|-- ai/              # AI component (shared logic)
+|-- packages/
+|   |-- auth/        # Authentication configuration & logic
+|   |-- config/      # Shared configs (tsconfig, lint)
+|   |-- db/          # Database schema & queries
+|   |-- env/         # Environment validation
 ```
 
 ## Available Scripts

@@ -8,6 +8,7 @@
     "check-types": "nitro prepare && tsc --noEmit"
   },
   "dependencies": {
+    "@aegisPhish-lab/ai": "workspace:*",
     "@aegisPhish-lab/auth": "workspace:*",
     "@aegisPhish-lab/db": "workspace:*",
     "@aegisPhish-lab/env": "workspace:*",

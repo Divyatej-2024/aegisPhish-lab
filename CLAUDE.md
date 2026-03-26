@@ -40,12 +40,16 @@ This file provides context about the project for AI assistants.
 
 ```
 aegisPhish-lab/
-├── apps/
-│   ├── web/         # Frontend application
-│   └── server/      # Backend API
-├── packages/
-│   ├── auth/        # Authentication
-│   └── db/          # Database schema
+|-- frontend/
+|   |-- web/         # Frontend application
+|-- backend/
+|   |-- server/      # Backend API
+|-- ai/              # AI component (shared logic)
+|-- packages/
+|   |-- auth/        # Authentication
+|   |-- config/      # Shared configs
+|   |-- db/          # Database schema
+|   |-- env/         # Environment validation
 ```
 
 ## Common Commands

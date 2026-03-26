@@ -2,7 +2,9 @@
   "name": "aegisPhish-lab",
   "private": true,
   "workspaces": [
-    "apps/*",
+    "frontend/*",
+    "backend/*",
+    "ai",
     "packages/*"
   ],
   "type": "module",

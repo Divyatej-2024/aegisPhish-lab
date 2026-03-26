@@ -1,5 +1,7 @@
 packages:
-  - apps/*
+  - frontend/*
+  - backend/*
+  - ai
   - packages/*
 catalog:
   dotenv: ^17.2.2

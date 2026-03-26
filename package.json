@@ -20,6 +20,7 @@
     "db:generate": "turbo -F @aegisPhish-lab/db db:generate",
     "db:migrate": "turbo -F @aegisPhish-lab/db db:migrate"
   },
+  "packageManager": "pnpm@10.0.0",
   "dependencies": {
     "@aegisPhish-lab/env": "workspace:*",
     "dotenv": "catalog:",

@@ -41,8 +41,11 @@
     "@effect/vitest": "catalog:",
     "@vitest/coverage-v8": "catalog:",
     "@vitest/ui": "catalog:",
+    "autoprefixer": "^10.4.27",
     "daisyui": "^5.0.0",
     "jsdom": "catalog:",
+    "postcss": "^8.5.8",
+    "tailwindcss": "^4.2.2",
     "typescript": "~5.7.0",
     "vitest": "catalog:"
   }

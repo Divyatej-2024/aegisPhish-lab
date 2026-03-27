@@ -1,5 +1,5 @@
 {
   "buildCommand": "pnpm run build",
-  "outputDirectory": "frontend/web/dist/web/"
+  "outputDirectory": "frontend/web/dist/web/browser/"
 
 }

@@ -1,5 +1,7 @@
 {
   "buildCommand": "pnpm run build",
-  "outputDirectory": "frontend/web/dist/web/browser/"
-
+  "outputDirectory": "frontend/web/dist/web/browser",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }

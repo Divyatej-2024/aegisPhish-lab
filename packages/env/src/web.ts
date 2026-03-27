@@ -3,54 +3,62 @@
 
 declare global {
   interface Window {
-    __env?: {
-      NEXT_PUBLIC_API_URL?: string;
-      NEXT_PUBLIC_APP_URL?: string;
-      VITE_SERVER_URL?: string;
-      NODE_ENV?: string;
-    };
+    __env?: Record<string, string | undefined>;
   }
 }
 
-// Helper to safely check if we're in browser environment
-const isBrowser ='undefined';
+const isBrowser = typeof window !== "undefined";
+const runtimeEnv = isBrowser ? window.__env ?? {} : {};
 
-// Try to get env vars from window.__env (runtime injection) or fallback to empty strings
-export const env = {
-  NEXT_PUBLIC_API_URL
-    : '',
-  
-  NEXT_PUBLIC_APP_URL:'',
-  
-  VITE_SERVER_URL: '',
+const normalize = (value: string | undefined) => {
+  if (!value) return value;
+  if (value.startsWith("%") && value.endsWith("%")) return "";
+  return value;
 };
 
-// Helper to check if we're in development mode
-export const isDevelopment = 'development';
+const readEnv = (key: string, fallback = "") => normalize(runtimeEnv[key]) ?? fallback;
 
-// Helper to check if we're in production mode
-export const isProduction = 'production';
+export const env = {
+  NEXT_PUBLIC_API_URL: readEnv("NEXT_PUBLIC_API_URL"),
+  NEXT_PUBLIC_APP_URL: readEnv("NEXT_PUBLIC_APP_URL"),
+  VITE_SERVER_URL: readEnv("VITE_SERVER_URL"),
+  VITE_FIREBASE_API_KEY: readEnv("VITE_FIREBASE_API_KEY"),
+  VITE_FIREBASE_AUTH_DOMAIN: readEnv("VITE_FIREBASE_AUTH_DOMAIN"),
+  VITE_FIREBASE_PROJECT_ID: readEnv("VITE_FIREBASE_PROJECT_ID"),
+  VITE_FIREBASE_STORAGE_BUCKET: readEnv("VITE_FIREBASE_STORAGE_BUCKET"),
+  VITE_FIREBASE_MESSAGING_SENDER_ID: readEnv("VITE_FIREBASE_MESSAGING_SENDER_ID"),
+  VITE_FIREBASE_APP_ID: readEnv("VITE_FIREBASE_APP_ID"),
+  VITE_FIREBASE_MEASUREMENT_ID: readEnv("VITE_FIREBASE_MEASUREMENT_ID"),
+  NODE_ENV: readEnv("NODE_ENV", "development"),
+};
 
-// Optional: Validate required environment variables
+export const isDevelopment = env.NODE_ENV === "development";
+export const isProduction = env.NODE_ENV === "production";
+
 export const validateEnv = () => {
-  if (!isBrowser) return true; // Skip validation on server
-  
-  const requiredVars = ['VITE_SERVER_URL'];
-  const missingVars = requiredVars.filter(key => !env[key as keyof typeof env]);
-  
+  if (!isBrowser) return true;
+
+  const requiredVars = [
+    "VITE_FIREBASE_API_KEY",
+    "VITE_FIREBASE_AUTH_DOMAIN",
+    "VITE_FIREBASE_PROJECT_ID",
+    "VITE_FIREBASE_APP_ID",
+  ];
+
+  const missingVars = requiredVars.filter((key) => !env[key as keyof typeof env]);
+
   if (missingVars.length > 0 && isProduction) {
-    console.error(`Missing required environment variables: ${missingVars.join(', ')}`);
+    console.error(`Missing required environment variables: ${missingVars.join(", ")}`);
     return false;
   }
-  
+
   return true;
 };
 
-// Optional: Log environment status (only in development)
 if (isBrowser && isDevelopment) {
-  console.log('Environment:', {
-    hasApiUrl: !!env.NEXT_PUBLIC_API_URL,
-    hasAppUrl: !!env.NEXT_PUBLIC_APP_URL,
+  console.log("Environment:", {
     hasServerUrl: !!env.VITE_SERVER_URL,
+    hasFirebaseApiKey: !!env.VITE_FIREBASE_API_KEY,
+    hasFirebaseProjectId: !!env.VITE_FIREBASE_PROJECT_ID,
   });
 }

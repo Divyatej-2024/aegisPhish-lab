@@ -1,17 +1,13 @@
 import { inject } from "@angular/core";
 import { CanActivateFn, Router } from "@angular/router";
 
-import { authClient } from "../lib/auth-client";
+import { getCurrentUser } from "../lib/firebase-auth";
 
 export const authGuard: CanActivateFn = async () => {
   const router = inject(Router);
 
-  try {
-    const { data } = await authClient.getSession();
-    if (data?.user) return true;
-  } catch {
-    // fall through to redirect
-  }
+  const user = await getCurrentUser();
+  if (user) return true;
 
-  return router.parseUrl("/");
+  return router.parseUrl("/login");
 };

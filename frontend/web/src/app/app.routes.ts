@@ -11,9 +11,11 @@ import { ReportsComponent } from "./pages/reports/reports.component";
 import { ProfileComponent } from "./pages/profile/profile.component";
 import { SecurityComponent } from "./pages/security/security.component";
 import { SettingsComponent } from "./pages/settings/settings.component";
+import { AuthComponent } from "./pages/auth/auth.component";
 
 export const routes: Routes = [
   { path: "", component: HomeComponent },
+  { path: "login", component: AuthComponent },
   { path: "dashboard", component: DashboardComponent, canActivate: [authGuard] },
   { path: "reports", component: ReportsComponent, canActivate: [authGuard] },
   { path: "billing", component: BillingComponent, canActivate: [authGuard] },

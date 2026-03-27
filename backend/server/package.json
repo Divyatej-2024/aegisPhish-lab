@@ -9,16 +9,15 @@
   },
   "dependencies": {
     "@aegisPhish-lab/ai": "workspace:*",
-    "@aegisPhish-lab/auth": "workspace:*",
     "@aegisPhish-lab/db": "workspace:*",
     "@aegisPhish-lab/env": "workspace:*",
     "@effect/platform": "catalog:",
     "@effect/platform-bun": "^0.88.0",
     "@effect/schema": "catalog:",
     "@effect/sql": "^0.50.0",
-    "better-auth": "catalog:",
     "dotenv": "catalog:",
     "effect": "catalog:",
+    "firebase-admin": "^13.0.2",
     "h3": "^1.15.3",
     "nitropack": "^2.11.12",
     "zod": "catalog:"

@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { RouterOutlet } from "@angular/router";
 
 import { HeaderComponent } from "./components/header.component";
+import { startAuthListener } from "./lib/auth-state";
 
 @Component({
   selector: "app-root",
@@ -18,4 +19,8 @@ import { HeaderComponent } from "./components/header.component";
 })
 export class AppComponent {
   title = "Better T Stack";
+
+  constructor() {
+    startAuthListener();
+  }
 }

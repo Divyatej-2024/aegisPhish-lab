@@ -1,10 +1,14 @@
+import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
 import { RouterLink, RouterLinkActive } from "@angular/router";
+
+import { currentUser, startAuthListener } from "../lib/auth-state";
+import { signOutUser } from "../lib/firebase-auth";
 
 @Component({
   selector: "app-header",
   standalone: true,
-  imports: [RouterLink, RouterLinkActive],
+  imports: [CommonModule, RouterLink, RouterLinkActive],
   template: `
     <header class="flex flex-wrap items-center justify-between gap-3 border-b border-gray-200 dark:border-gray-800 px-4 py-3">
       <div class="flex items-center gap-2">
@@ -63,8 +67,32 @@ import { RouterLink, RouterLinkActive } from "@angular/router";
         >
           Admin
         </a>
+        <a
+          *ngIf="!user()"
+          routerLink="/login"
+          class="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+        >
+          Sign in
+        </a>
+        <button
+          *ngIf="user()"
+          class="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+          (click)="handleSignOut()"
+        >
+          Sign out
+        </button>
       </nav>
     </header>
   `,
 })
-export class HeaderComponent {}
+export class HeaderComponent {
+  readonly user = currentUser;
+
+  constructor() {
+    startAuthListener();
+  }
+
+  async handleSignOut() {
+    await signOutUser();
+  }
+}

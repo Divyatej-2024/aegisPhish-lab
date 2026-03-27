@@ -1,25 +1,16 @@
 import { inject } from "@angular/core";
 import { CanActivateFn, Router } from "@angular/router";
 
-import { authClient } from "../lib/auth-client";
-
-const hasAdminRole = (role: unknown): boolean => {
-  if (Array.isArray(role)) return role.includes("admin");
-  if (typeof role === "string") {
-    return role === "admin" || role.split(",").map((value) => value.trim()).includes("admin");
-  }
-  return false;
-};
+import { getCurrentUser, isAdminUser } from "../lib/firebase-auth";
 
 export const adminGuard: CanActivateFn = async () => {
   const router = inject(Router);
 
-  try {
-    const { data } = await authClient.getSession();
-    if (data && hasAdminRole((data as any).user?.role)) return true;
-  } catch {
-    // fall through to redirect
-  }
+  const user = await getCurrentUser();
+  if (!user) return router.parseUrl("/login");
+
+  // Compliance: enforce admin access via Firebase custom claims.
+  if (await isAdminUser()) return true;
 
   return router.parseUrl("/dashboard");
 };

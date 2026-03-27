@@ -1,7 +1,9 @@
 import { CommonModule } from "@angular/common";
 import { Component, computed, signal } from "@angular/core";
 
-import { authClient } from "../../lib/auth-client";
+import { apiFetch } from "../../lib/api";
+import { currentUser, startAuthListener } from "../../lib/auth-state";
+import { getIdTokenClaims } from "../../lib/firebase-auth";
 
 @Component({
   selector: "app-admin",
@@ -104,9 +106,10 @@ export class AdminComponent {
   readonly error = signal<string | null>(null);
 
   readonly users = computed(() => this.usersData());
-  readonly sessionUserEmail = computed(() => this.sessionData()?.user?.email);
+  readonly sessionUserEmail = computed(() => this.sessionData()?.email);
 
   constructor() {
+    startAuthListener();
     void this.loadUsers();
   }
 
@@ -115,23 +118,24 @@ export class AdminComponent {
     this.error.set(null);
 
     try {
-      const sessionResponse = await authClient.getSession();
-      this.sessionData.set(sessionResponse.data ?? null);
+      const user = currentUser();
+      this.sessionData.set(user ? { email: user.email } : null);
 
-      const response = await authClient.admin.listUsers({
-        query: {
-          limit: 20,
-          offset: 0,
-          sortBy: "createdAt",
-          sortDirection: "desc",
-        },
-      });
-
-      if (response.error) {
-        this.error.set(response.error.message ?? "Failed to load users.");
+      const response = await apiFetch(`/api/admin/users?limit=20`);
+      if (!response.ok) {
+        const message = await response.text();
+        this.error.set(message || "Failed to load users.");
         this.usersData.set([]);
-      } else {
-        this.usersData.set(response.data?.users ?? []);
+        return;
+      }
+
+      const payload = await response.json();
+      this.usersData.set(payload.users ?? []);
+
+      const claims = await getIdTokenClaims();
+      if (!claims?.["admin"] && !claims?.["role"]) {
+        // Compliance hint: admin claims are required to view full admin data.
+        this.error.set("Admin claims missing. Add Firebase custom claim: { admin: true }.");
       }
     } catch (err) {
       this.error.set(err instanceof Error ? err.message : "Failed to load users.");

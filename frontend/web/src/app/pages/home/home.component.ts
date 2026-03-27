@@ -28,6 +28,12 @@ import { RouterLink } from "@angular/router";
           >
             Admin Console
           </a>
+          <a
+            class="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:border-gray-400 hover:text-gray-900 dark:border-gray-700 dark:text-gray-300"
+            routerLink="/login"
+          >
+            Sign In
+          </a>
         </div>
       </div>
 

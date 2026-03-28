@@ -7,7 +7,7 @@ export const adminGuard: CanActivateFn = async () => {
   const router = inject(Router);
 
   const user = await getCurrentUser();
-  if (!user) return router.parseUrl("/login");
+  if (!user) return router.parseUrl("/admin/login");
 
   // Compliance: enforce admin access via Firebase custom claims.
   if (await isAdminUser()) return true;

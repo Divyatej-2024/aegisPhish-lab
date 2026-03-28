@@ -26,6 +26,6 @@ export const routes: Routes = [
   { path: "settings/security", component: SecurityComponent, canActivate: [authGuard] },
   { path: "training", component: TrainingComponent, canActivate: [authGuard] },
   { path: "training/:page", component: TrainingComponent, canActivate: [authGuard] },
-  { path: "admin", component: AdminComponent, canActivate: [adminGuard] },
+  { path: "admin", component: AdminComponent, canActivate: [adminGuard], canMatch: [adminGuard] },
   { path: "**", redirectTo: "" },
 ];

@@ -2,7 +2,7 @@ import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
 import { RouterLink, RouterLinkActive } from "@angular/router";
 
-import { currentUser, startAuthListener } from "../lib/auth-state";
+import { currentUser, isAdmin, startAuthListener } from "../lib/auth-state";
 import { signOutUser } from "../lib/firebase-auth";
 
 @Component({
@@ -71,6 +71,7 @@ import { signOutUser } from "../lib/firebase-auth";
           routerLink="/admin"
           routerLinkActive="text-gray-900 dark:text-gray-100"
           class="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+          *ngIf="admin()"
         >
           Admin
         </a>
@@ -94,6 +95,7 @@ import { signOutUser } from "../lib/firebase-auth";
 })
 export class HeaderComponent {
   readonly user = currentUser;
+  readonly admin = isAdmin;
 
   constructor() {
     startAuthListener();

@@ -12,6 +12,7 @@ import { ProfileComponent } from "./pages/profile/profile.component";
 import { SecurityComponent } from "./pages/security/security.component";
 import { SettingsComponent } from "./pages/settings/settings.component";
 import { AuthComponent } from "./pages/auth/auth.component";
+import { TrainingComponent } from "./pages/training/training.component";
 
 export const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -23,6 +24,8 @@ export const routes: Routes = [
   { path: "settings", component: SettingsComponent, canActivate: [authGuard] },
   { path: "settings/profile", component: ProfileComponent, canActivate: [authGuard] },
   { path: "settings/security", component: SecurityComponent, canActivate: [authGuard] },
+  { path: "training", component: TrainingComponent, canActivate: [authGuard] },
+  { path: "training/:page", component: TrainingComponent, canActivate: [authGuard] },
   { path: "admin", component: AdminComponent, canActivate: [adminGuard] },
   { path: "**", redirectTo: "" },
 ];

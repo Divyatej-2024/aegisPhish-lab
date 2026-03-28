@@ -1,3 +1,4 @@
+/// <reference lib="dom" />
 // packages/env/src/web.ts
 // Browser-safe environment variables for Angular web app
 
@@ -8,7 +9,9 @@ declare global {
 }
 
 const isBrowser = typeof window !== "undefined";
-const runtimeEnv = isBrowser ? window.__env ?? {} : {};
+const runtimeEnv: Record<string, string | undefined> = isBrowser
+  ? window.__env ?? {}
+  : {};
 
 const readEnv = (key: string, fallback = "") => runtimeEnv[key] ?? fallback;
 

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Level 8: Angler Phishing</title>
+  <script src="cookie.js"></script>
+  <script src="game.js"></script>
+<link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="level-style.css">
+</head>
+<body id="social-media-theme" onload="checkLogin(); updateProgressBar();">
+ <div class="container">
+  <div id="progress-container"><div id="progress-bar"></div></div>
+  <h2>Level 8: Angler Phishing</h2>
+  <p>Your flight was delayed, so you post a complaint on social media, tagging the airline. Moments later, you get a reply from another account with a similar name and logo. They apologize and ask you to send them a direct message with your booking reference and passport number to "expedite your compensation claim."</p>
+  <div class="scenario-box">
+    <p><b>BritainAirHelp:</b>  "We are so sorry for the delay. Please DM us your full name, booking reference, and passport number so we can assist you with your claim immediately."</p>
+  </div>
+  <br>
+  <div class="button-container">
+  <button class="btn-choice" onclick="alert('❌ Wrong! Scammers monitor social media for customer complaints. They create fake support accounts (angler phishing) to trick you into giving them sensitive personal data, which can be used for identity theft.')">Send them your details via DM</button>
+  <button class="btn-choice" onclick="alert('✅ Correct! You should always verify the social media account is the official, verified one (look for a blue checkmark or high follower count). Never share sensitive data like a passport number in a DM.'); proceedToNextLevel();">Check the account's profile and see it's fake</button>
+  </div>
+  <a href="menu.html">Back to Menu</a>
+  </div>
+</body>
+</html>

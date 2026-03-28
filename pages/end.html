@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Game Completed</title>
+  <script src="cookie.js"></script>
+  <script src="game.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body onload="checkLogin(); renderEndSummary();">
+  <div class="container">
+    <h2>Congratulations!</h2>
+    <p id="completion-summary">You have completed the phishing simulation.</p>
+    <div class="button-container">
+      <a href="menu.html">Back to Menu</a>
+      <button onclick="logout()" class="btn-logout">Logout</button>
+    </div>
+  </div>
+</body>
+</html>

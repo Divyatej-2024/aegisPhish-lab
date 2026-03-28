@@ -10,13 +10,7 @@ declare global {
 const isBrowser = typeof window !== "undefined";
 const runtimeEnv = isBrowser ? window.__env ?? {} : {};
 
-const normalize = (value: string | undefined) => {
-  if (!value) return value;
-  if (value.startsWith("%") && value.endsWith("%")) return "";
-  return value;
-};
-
-const readEnv = (key: string, fallback = "") => normalize(runtimeEnv[key]) ?? fallback;
+const readEnv = (key: string, fallback = "") => runtimeEnv[key] ?? fallback;
 
 export const env = {
   NEXT_PUBLIC_API_URL: readEnv("NEXT_PUBLIC_API_URL"),

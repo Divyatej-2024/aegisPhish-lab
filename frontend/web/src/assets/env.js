@@ -1,3 +1,5 @@
+(function() {
+  console.log('env.js is executing');
 // This file will be generated during build or injected at runtime
 window.__env = {
   NEXT_PUBLIC_API_URL: '%NEXT_PUBLIC_API_URL%',
@@ -12,3 +14,6 @@ window.__env = {
   VITE_FIREBASE_MEASUREMENT_ID: "G-8C6XVKC923" || '%VITE_FIREBASE_MEASUREMENT_ID%',
   NODE_ENV: '%NODE_ENV%',
 };
+
+console.log('window.__env set:', window.__env);
+})();

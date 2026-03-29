@@ -31,7 +31,7 @@ const TRAINING_PAGES = new Set([
   selector: "app-training",
   standalone: true,
   template: `
-    <section class="training-shell">
+    <section class="training-shell anim-fade-up">
       <div class="training-toolbar">
         <div>
           <h1>Phishing Training</h1>

@@ -6,7 +6,7 @@ import { RouterLink } from "@angular/router";
   standalone: true,
   imports: [RouterLink],
   template: `
-    <div class="container mx-auto max-w-5xl px-4 py-10">
+    <div class="container mx-auto max-w-5xl px-4 py-10 anim-fade-up">
       <div class="rounded-2xl border border-gray-200 dark:border-gray-800 p-6 md:p-10">
         <h1 class="text-3xl font-semibold leading-tight">
           AegisPhish Suite
@@ -37,7 +37,7 @@ import { RouterLink } from "@angular/router";
         </div>
       </div>
 
-      <div class="mt-8 grid gap-4 md:grid-cols-3">
+      <div class="mt-8 grid gap-4 md:grid-cols-3 anim-stagger">
         <div class="rounded-lg border border-gray-200 dark:border-gray-800 p-4">
           <h2 class="text-sm font-semibold">User Experience</h2>
           <p class="mt-2 text-xs text-gray-600 dark:text-gray-400">

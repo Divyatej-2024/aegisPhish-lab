@@ -11,8 +11,8 @@ import { currentUser, startAuthListener } from "../../lib/auth-state";
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <section class="container mx-auto max-w-md px-4 py-10">
-      <div class="rounded-2xl border border-gray-200 dark:border-gray-800 p-6">
+    <section class="container mx-auto max-w-md px-4 py-10 anim-fade-up">
+      <div class="rounded-2xl border border-gray-200 dark:border-gray-800 p-6 anim-fade">
         <h1 class="text-2xl font-semibold">Sign in to AegisPhish</h1>
         <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
           Email/password + Google sign-in are enabled for compliance-grade access control.

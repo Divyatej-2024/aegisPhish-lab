@@ -11,7 +11,7 @@ import { getIdTokenClaims } from "../../lib/firebase-auth";
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <section class="container mx-auto max-w-6xl px-4 py-8">
+    <section class="container mx-auto max-w-6xl px-4 py-8 anim-fade-up">
       <div class="rounded-lg border border-gray-200 dark:border-gray-800 p-6">
         <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
@@ -25,7 +25,7 @@ import { getIdTokenClaims } from "../../lib/firebase-auth";
           </div>
         </div>
 
-        <div class="mt-6 grid gap-4 md:grid-cols-3">
+        <div class="mt-6 grid gap-4 md:grid-cols-3 anim-stagger">
           <div class="rounded-md border border-gray-200 dark:border-gray-800 p-4">
             <h2 class="text-sm font-medium">MFA Enforcement</h2>
             <p class="mt-1 text-xs text-gray-600 dark:text-gray-400">
@@ -47,7 +47,7 @@ import { getIdTokenClaims } from "../../lib/firebase-auth";
         </div>
 
         <div class="mt-8">
-          <div class="rounded-md border border-gray-200 dark:border-gray-800 p-4">
+          <div class="rounded-md border border-gray-200 dark:border-gray-800 p-4 anim-fade">
             <h2 class="text-sm font-semibold">Admin Actions</h2>
             <p class="mt-1 text-xs text-gray-600 dark:text-gray-400">
               Create users and manage admin access directly from the console.
@@ -105,7 +105,7 @@ import { getIdTokenClaims } from "../../lib/firebase-auth";
             </div>
           </div>
 
-          <div class="flex items-center justify-between">
+          <div class="flex items-center justify-between mt-6">
             <h2 class="text-sm font-semibold">Users</h2>
             <button
               class="text-xs text-blue-600 hover:text-blue-500"
@@ -218,7 +218,6 @@ export class AdminComponent {
 
       const claims = await getIdTokenClaims();
       if (!claims?.["admin"] && !claims?.["role"]) {
-        // Compliance hint: admin claims are required to view full admin data.
         this.error.set("Admin claims missing. Add Firebase custom claim: { admin: true }.");
       }
     } catch (err) {

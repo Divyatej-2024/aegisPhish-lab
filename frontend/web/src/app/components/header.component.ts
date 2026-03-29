@@ -10,7 +10,7 @@ import { signOutUser } from "../lib/firebase-auth";
   standalone: true,
   imports: [CommonModule, RouterLink, RouterLinkActive],
   template: `
-    <header class="flex flex-wrap items-center justify-between gap-3 border-b border-gray-200 dark:border-gray-800 px-4 py-3">
+    <header class="anim-fade flex flex-wrap items-center justify-between gap-3 border-b border-gray-200 dark:border-gray-800 px-4 py-3">
       <div class="flex items-center gap-2">
         <span class="font-semibold">AegisPhish Suite</span>
         <span class="rounded-full bg-gray-100 px-2 py-0.5 text-[10px] uppercase tracking-wide text-gray-600 dark:bg-gray-900 dark:text-gray-400">

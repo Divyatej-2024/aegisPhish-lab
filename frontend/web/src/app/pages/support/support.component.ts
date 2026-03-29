@@ -6,13 +6,13 @@ import { Component } from "@angular/core";
   standalone: true,
   imports: [CommonModule],
   template: `
-    <section class="container mx-auto max-w-5xl px-4 py-8">
+    <section class="container mx-auto max-w-5xl px-4 py-8 anim-fade-up">
       <h1 class="text-xl font-semibold">Support</h1>
       <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
         Open a ticket or browse help resources.
       </p>
 
-      <div class="mt-6 grid gap-4 md:grid-cols-2">
+      <div class="mt-6 grid gap-4 md:grid-cols-2 anim-stagger">
         <div class="rounded-lg border border-gray-200 dark:border-gray-800 p-4">
           <h2 class="text-sm font-medium">Open Ticket</h2>
           <p class="mt-2 text-xs text-gray-600 dark:text-gray-400">

@@ -58,6 +58,16 @@ const CHALLENGES: CtfChallengeSeed[] = [
     points: 150,
     flag: "CTF{logic_shift_master}",
   },
+  {
+    slug: "attack-chain-sim",
+    title: "Attack Chain (Simulated)",
+    description:
+      "Review the fictional incident notes and identify the technique used to pivot from phishing to internal access.",
+    hint: "The answer is the technique name in the notes.",
+    category: "Incident Analysis",
+    points: 175,
+    flag: "CTF{attack_chain_sim}",
+  },
 ];
 
 export const hashFlag = (flag: string) =>

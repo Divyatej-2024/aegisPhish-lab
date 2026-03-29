@@ -479,9 +479,10 @@ export class CtfComponent {
 
   readonly statusLabel = computed(() => {
     const solved = this.progress()?.solvedCount ?? 0;
-    if (solved >= 5) return "CTF Finisher";
-    if (solved >= 3) return "Operator Mode";
-    if (solved >= 1) return "Analyst Mode";
+    const total = this.challenges().length || 0;
+    if (total > 0 && solved >= total) return "CTF Finisher";
+    if (total > 0 && solved >= Math.ceil(total * 0.6)) return "Operator Mode";
+    if (total > 0 && solved >= Math.ceil(total * 0.2)) return "Analyst Mode";
     return "Rookie Mode";
   });
 

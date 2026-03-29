@@ -1,0 +1,9 @@
+=== Aegis Artifact Dump ===
+Operator: lab-analyst
+Timestamp: 2026-03-29T11:20:00Z
+
+payload_hex=4354467b6865785f68756e7465727d
+
+Notes:
+- This is a synthetic training artifact.
+- Decode the hex to recover the flag.

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Aegis CTF - Phish Lab</title>
+  <link rel="stylesheet" href="ctf-style.css" />
+  <script src="ctf.js" defer></script>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">Aegis Phish Lab</p>
+      <h1>Mini Cyber CTF</h1>
+      <p class="subtitle">
+        Five bite-sized challenges across OSINT, crypto, web, forensics, and logic.
+        Everything is local and safe.
+      </p>
+      <div class="hero-actions">
+        <a class="btn" href="menu.html">Back to Menu</a>
+        <button class="btn ghost" id="reset-ctf">Reset CTF Progress</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="progress">
+      <div class="progress-meta">
+        <span id="ctf-progress-label">0/5 flags captured</span>
+        <span class="tag" id="ctf-status">Rookie Mode</span>
+      </div>
+      <div class="progress-bar">
+        <div id="ctf-progress-bar"></div>
+      </div>
+    </section>
+
+    <!-- Challenge 1: OSINT (flag in page source) -->
+    <section class="card" data-flag-id="osint">
+      <div class="card-header">
+        <h2>01. OSINT - The Invisible Note</h2>
+        <span class="pill">Easy</span>
+      </div>
+      <p>
+        The team left a hint in plain sight, but it is not visible on the page.
+        Find the flag in the page source.
+      </p>
+      <!-- FLAG: CTF{source_sleuth} -->
+      <div class="challenge">
+        <input type="text" placeholder="CTF{...}" data-flag-input />
+        <button class="btn" data-flag-submit>Submit Flag</button>
+      </div>
+      <p class="hint">Hint: Right-click, then view page source.</p>
+      <p class="result" data-flag-result></p>
+    </section>
+
+    <!-- Challenge 2: Crypto (Base64) -->
+    <section class="card" data-flag-id="crypto">
+      <div class="card-header">
+        <h2>02. Crypto - Base64 Drop</h2>
+        <span class="pill">Easy</span>
+      </div>
+      <p>
+        Decode the following string:
+        <code class="code-inline">Q1RGe2Jhc2U2NF9tYXN0ZXJ5fQ==</code>
+      </p>
+      <div class="challenge">
+        <input type="text" placeholder="CTF{...}" data-flag-input />
+        <button class="btn" data-flag-submit>Submit Flag</button>
+      </div>
+      <p class="hint">Hint: Base64 decode.</p>
+      <p class="result" data-flag-result></p>
+    </section>
+
+    <!-- Challenge 3: Web (Cookie) -->
+    <section class="card" data-flag-id="web">
+      <div class="card-header">
+        <h2>03. Web - Cookie Crumbs</h2>
+        <span class="pill">Medium</span>
+      </div>
+      <p>
+        Set a cookie named <code class="code-inline">ap_ctf_token</code> with value
+        <code class="code-inline">trustno1</code>. Then submit any flag to validate.
+      </p>
+      <div class="challenge">
+        <input type="text" placeholder="CTF{...}" data-flag-input />
+        <button class="btn" data-flag-submit>Submit Flag</button>
+      </div>
+      <p class="hint">Hint: Use DevTools &gt; Application &gt; Cookies.</p>
+      <p class="result" data-flag-result></p>
+    </section>
+
+    <!-- Challenge 4: Forensics (Hex in artifact) -->
+    <section class="card" data-flag-id="forensics">
+      <div class="card-header">
+        <h2>04. Forensics - Artifact Decode</h2>
+        <span class="pill">Medium</span>
+      </div>
+      <p>
+        Download the artifact and recover the flag hidden inside.
+      </p>
+      <div class="challenge">
+        <a class="btn ghost" href="ctf_artifact.txt" download>Download Artifact</a>
+        <input type="text" placeholder="CTF{...}" data-flag-input />
+        <button class="btn" data-flag-submit>Submit Flag</button>
+      </div>
+      <p class="hint">Hint: The flag is hex-encoded.</p>
+      <p class="result" data-flag-result></p>
+    </section>
+
+    <!-- Challenge 5: Logic (Caesar) -->
+    <section class="card" data-flag-id="logic">
+      <div class="card-header">
+        <h2>05. Logic - Shifted Signal</h2>
+        <span class="pill">Hard</span>
+      </div>
+      <p>
+        Decrypt the message below (Caesar shift of 7):
+        <code class="code-inline">JAM{svnpj_zopma_thzaly}</code>
+      </p>
+      <div class="challenge">
+        <input type="text" placeholder="CTF{...}" data-flag-input />
+        <button class="btn" data-flag-submit>Submit Flag</button>
+      </div>
+      <p class="hint">Hint: Shift letters backward by 7.</p>
+      <p class="result" data-flag-result></p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>CTF build: local-only, ethical training sandbox.</p>
+  </footer>
+</body>
+</html>

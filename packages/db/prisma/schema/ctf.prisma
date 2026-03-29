@@ -1,0 +1,30 @@
+model CtfChallenge {
+  id          String          @id @default(uuid()) @map("_id")
+  slug        String          @unique
+  title       String
+  description String
+  hint        String?
+  category    String
+  points      Int
+  flagHash    String
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  submissions CtfSubmission[]
+
+  @@map("ctf_challenge")
+}
+
+model CtfSubmission {
+  id          String       @id @default(uuid()) @map("_id")
+  userId      String
+  userName    String?
+  userEmail   String?
+  challengeId String
+  correct     Boolean      @default(false)
+  flagHash    String?
+  submittedAt DateTime     @default(now())
+  challenge   CtfChallenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+
+  @@index([userId, challengeId])
+  @@map("ctf_submission")
+}

@@ -14,6 +14,7 @@ import { SettingsComponent } from "./pages/settings/settings.component";
 import { AuthComponent } from "./pages/auth/auth.component";
 import { TrainingComponent } from "./pages/training/training.component";
 import { AdminLoginComponent } from "./pages/admin-login/admin-login.component";
+import { CtfComponent } from "./pages/ctf/ctf.component";
 
 export const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -27,6 +28,7 @@ export const routes: Routes = [
   { path: "settings/security", component: SecurityComponent, canActivate: [authGuard] },
   { path: "training", component: TrainingComponent, canActivate: [authGuard] },
   { path: "training/:page", component: TrainingComponent, canActivate: [authGuard] },
+  { path: "ctf", component: CtfComponent, canActivate: [authGuard] },
   { path: "admin/login", component: AdminLoginComponent },
   { path: "admin", component: AdminComponent, canActivate: [adminGuard], canMatch: [adminGuard] },
   { path: "**", redirectTo: "" },

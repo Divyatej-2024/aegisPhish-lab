@@ -31,78 +31,75 @@ type ScoreRow = {
   standalone: true,
   imports: [CommonModule],
   template: `
-    <section class="mx-auto max-w-6xl px-4 py-8 anim-fade-up">
-      <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-        <p class="text-xs uppercase tracking-[0.2em] text-rose-600">Aegis CTF</p>
-        <h1 class="mt-2 text-2xl font-semibold text-gray-900">Cyber CTF Arena</h1>
-        <p class="mt-2 text-sm text-gray-600">
+    <section class="ctf-shell anim-fade-up">
+      <div class="ctf-hero">
+        <p class="ctf-eyebrow">Aegis CTF</p>
+        <h1>Cyber CTF Arena</h1>
+        <p class="ctf-subtitle">
           Solve challenges, submit flags, and climb the scoreboard. Every solve is tracked to your account.
         </p>
-        <div class="mt-4 flex flex-wrap gap-3">
+        <div class="ctf-tabs">
           <button
-            class="rounded-full border border-gray-900 px-4 py-2 text-sm font-semibold text-gray-900 transition hover:-translate-y-0.5"
+            class="ctf-tab"
             (click)="activeTab.set('challenges')"
-            [class.bg-gray-900]="activeTab() === 'challenges'"
-            [class.text-white]="activeTab() === 'challenges'"
+            [class.active]="activeTab() === 'challenges'"
           >
             Challenges
           </button>
           <button
-            class="rounded-full border border-gray-900 px-4 py-2 text-sm font-semibold text-gray-900 transition hover:-translate-y-0.5"
+            class="ctf-tab"
             (click)="activeTab.set('scoreboard')"
-            [class.bg-gray-900]="activeTab() === 'scoreboard'"
-            [class.text-white]="activeTab() === 'scoreboard'"
+            [class.active]="activeTab() === 'scoreboard'"
           >
             Scoreboard
           </button>
         </div>
       </div>
 
-      <div class="mt-6 grid gap-4 md:grid-cols-3">
-        <div class="rounded-xl border border-gray-200 bg-white p-4">
-          <p class="text-xs uppercase tracking-widest text-gray-500">Solved</p>
-          <p class="mt-1 text-2xl font-semibold text-gray-900">{{ progress()?.solvedCount ?? 0 }}</p>
+      <div class="ctf-stats">
+        <div class="ctf-stat">
+          <p class="ctf-stat-label">Solved</p>
+          <p class="ctf-stat-value">{{ progress()?.solvedCount ?? 0 }}</p>
         </div>
-        <div class="rounded-xl border border-gray-200 bg-white p-4">
-          <p class="text-xs uppercase tracking-widest text-gray-500">Points</p>
-          <p class="mt-1 text-2xl font-semibold text-gray-900">{{ progress()?.totalPoints ?? 0 }}</p>
+        <div class="ctf-stat">
+          <p class="ctf-stat-label">Points</p>
+          <p class="ctf-stat-value">{{ progress()?.totalPoints ?? 0 }}</p>
         </div>
-        <div class="rounded-xl border border-gray-200 bg-white p-4">
-          <p class="text-xs uppercase tracking-widest text-gray-500">Status</p>
-          <p class="mt-1 text-base font-semibold text-rose-600">{{ statusLabel() }}</p>
+        <div class="ctf-stat">
+          <p class="ctf-stat-label">Status</p>
+          <p class="ctf-stat-value accent">{{ statusLabel() }}</p>
         </div>
       </div>
 
-      <div class="mt-6 rounded-2xl border border-gray-200 bg-white p-6" *ngIf="activeTab() === 'challenges'">
-        <div class="flex items-center justify-between gap-4">
-          <h2 class="text-lg font-semibold text-gray-900">Challenges</h2>
-          <button class="text-sm font-semibold text-gray-600 hover:text-gray-900" (click)="loadAll()">
+      <div class="ctf-panel" *ngIf="activeTab() === 'challenges'">
+        <div class="ctf-panel-header">
+          <h2>Challenges</h2>
+          <button class="ctf-link" (click)="loadAll()">
             Refresh
           </button>
         </div>
 
-        <div class="mt-4 grid gap-4">
+        <div class="ctf-grid">
           <div
-            class="rounded-xl border border-gray-200 p-4 transition"
+            class="ctf-card"
             *ngFor="let challenge of challenges()"
-            [class.border-emerald-400]="isSolved(challenge.slug)"
-            [class.bg-emerald-50]="isSolved(challenge.slug)"
+            [class.solved]="isSolved(challenge.slug)"
           >
-            <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="ctf-card-header">
               <div>
-                <p class="text-xs uppercase tracking-widest text-gray-500">{{ challenge.category }}</p>
-                <h3 class="mt-1 text-base font-semibold text-gray-900">{{ challenge.title }}</h3>
+                <p class="ctf-card-category">{{ challenge.category }}</p>
+                <h3>{{ challenge.title }}</h3>
               </div>
-              <span class="rounded-full border border-gray-300 px-3 py-1 text-xs font-semibold text-gray-700">
+              <span class="ctf-pill">
                 {{ challenge.points }} pts
               </span>
             </div>
-            <p class="mt-2 text-sm text-gray-600">{{ challenge.description }}</p>
-            <p class="mt-1 text-xs text-gray-500" *ngIf="challenge.hint">Hint: {{ challenge.hint }}</p>
+            <p class="ctf-card-desc">{{ challenge.description }}</p>
+            <p class="ctf-card-hint" *ngIf="challenge.hint">Hint: {{ challenge.hint }}</p>
 
-            <div class="mt-3 flex flex-wrap gap-2">
+            <div class="ctf-input-row">
               <input
-                class="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm"
+                class="ctf-input"
                 type="text"
                 placeholder="CTF{...}"
                 [value]="flagInputs()[challenge.slug] ?? ''"
@@ -110,7 +107,7 @@ type ScoreRow = {
                 [disabled]="isSolved(challenge.slug)"
               />
               <button
-                class="rounded-lg bg-gray-900 px-4 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
+                class="ctf-submit"
                 (click)="submitFlag(challenge.slug)"
                 [disabled]="isSolved(challenge.slug) || loading()"
               >
@@ -118,24 +115,24 @@ type ScoreRow = {
               </button>
             </div>
 
-            <p class="mt-2 text-sm font-semibold" [class.text-emerald-600]="isSolved(challenge.slug)">
+            <p class="ctf-card-status" [class.solved]="isSolved(challenge.slug)">
               {{ statusBySlug()[challenge.slug] ?? (isSolved(challenge.slug) ? "Solved" : "") }}
             </p>
           </div>
         </div>
       </div>
 
-      <div class="mt-6 rounded-2xl border border-gray-200 bg-white p-6" *ngIf="activeTab() === 'scoreboard'">
-        <div class="flex items-center justify-between gap-4">
-          <h2 class="text-lg font-semibold text-gray-900">Scoreboard</h2>
-          <button class="text-sm font-semibold text-gray-600 hover:text-gray-900" (click)="loadScoreboard()">
+      <div class="ctf-panel" *ngIf="activeTab() === 'scoreboard'">
+        <div class="ctf-panel-header">
+          <h2>Scoreboard</h2>
+          <button class="ctf-link" (click)="loadScoreboard()">
             Refresh
           </button>
         </div>
-        <div class="mt-4 overflow-x-auto">
-          <table class="min-w-full text-left text-sm">
+        <div class="ctf-table-wrap">
+          <table class="ctf-table">
             <thead>
-              <tr class="text-xs uppercase tracking-widest text-gray-500">
+              <tr>
                 <th class="py-2 pr-4">Rank</th>
                 <th class="py-2 pr-4">Player</th>
                 <th class="py-2 pr-4">Solved</th>
@@ -144,24 +141,329 @@ type ScoreRow = {
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let row of scoreboard(); let i = index" class="border-t border-gray-200">
-                <td class="py-3 pr-4 font-semibold">{{ i + 1 }}</td>
-                <td class="py-3 pr-4">{{ row.name }}</td>
-                <td class="py-3 pr-4">{{ row.solved }}</td>
-                <td class="py-3 pr-4 font-semibold">{{ row.score }}</td>
-                <td class="py-3 text-xs text-gray-500">
+              <tr *ngFor="let row of scoreboard(); let i = index">
+                <td class="rank">{{ i + 1 }}</td>
+                <td>{{ row.name }}</td>
+                <td>{{ row.solved }}</td>
+                <td class="score">{{ row.score }}</td>
+                <td class="muted">
                   {{ row.lastSolveAt ? (row.lastSolveAt | date: "medium") : "—" }}
                 </td>
               </tr>
             </tbody>
           </table>
-          <p class="mt-4 text-sm text-gray-500" *ngIf="!scoreboard().length">No solves yet.</p>
+          <p class="ctf-empty" *ngIf="!scoreboard().length">No solves yet.</p>
         </div>
       </div>
 
-      <p class="mt-6 text-sm text-red-600" *ngIf="error()">{{ error() }}</p>
+      <p class="ctf-error" *ngIf="error()">{{ error() }}</p>
     </section>
   `,
+  styles: [
+    `
+      :host {
+        display: block;
+        background: radial-gradient(circle at top, #ffe4e6, #f8fafc 45%, #dbeafe);
+        min-height: 100%;
+      }
+
+      .ctf-shell {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 2rem 1.5rem 3rem;
+        display: grid;
+        gap: 1.5rem;
+      }
+
+      .ctf-hero {
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(15, 23, 42, 0.15);
+        border-radius: 1.5rem;
+        padding: 1.75rem;
+        box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
+      }
+
+      .ctf-eyebrow {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.25em;
+        color: #be123c;
+        margin: 0;
+      }
+
+      .ctf-hero h1 {
+        margin: 0.5rem 0 0 0;
+        font-size: 2rem;
+        font-weight: 700;
+        color: #0f172a;
+      }
+
+      .ctf-subtitle {
+        margin: 0.75rem 0 0 0;
+        color: #475569;
+        max-width: 720px;
+      }
+
+      .ctf-tabs {
+        margin-top: 1.25rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+
+      .ctf-tab {
+        border-radius: 999px;
+        border: 1px solid #0f172a;
+        padding: 0.5rem 1.1rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #0f172a;
+        background: transparent;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      }
+
+      .ctf-tab:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.15);
+      }
+
+      .ctf-tab.active {
+        background: #0f172a;
+        color: #ffffff;
+      }
+
+      .ctf-stats {
+        display: grid;
+        gap: 1rem;
+      }
+
+      .ctf-stat {
+        background: #ffffff;
+        border-radius: 1rem;
+        border: 1px solid rgba(15, 23, 42, 0.12);
+        padding: 1rem 1.25rem;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+      }
+
+      .ctf-stat-label {
+        margin: 0;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: #64748b;
+      }
+
+      .ctf-stat-value {
+        margin: 0.5rem 0 0 0;
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: #0f172a;
+      }
+
+      .ctf-stat-value.accent {
+        color: #be123c;
+      }
+
+      .ctf-panel {
+        background: #ffffff;
+        border-radius: 1.5rem;
+        border: 1px solid rgba(15, 23, 42, 0.12);
+        padding: 1.5rem;
+        box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+      }
+
+      .ctf-panel-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+
+      .ctf-panel-header h2 {
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #0f172a;
+      }
+
+      .ctf-link {
+        background: none;
+        border: none;
+        font-weight: 600;
+        color: #334155;
+        cursor: pointer;
+      }
+
+      .ctf-grid {
+        margin-top: 1.25rem;
+        display: grid;
+        gap: 1rem;
+      }
+
+      .ctf-card {
+        border-radius: 1.1rem;
+        border: 1px solid rgba(15, 23, 42, 0.12);
+        padding: 1.25rem;
+        background: linear-gradient(135deg, #ffffff, #f8fafc);
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      }
+
+      .ctf-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+      }
+
+      .ctf-card.solved {
+        border-color: rgba(16, 185, 129, 0.6);
+        background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+      }
+
+      .ctf-card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+
+      .ctf-card-category {
+        margin: 0;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: #64748b;
+      }
+
+      .ctf-card h3 {
+        margin: 0.35rem 0 0 0;
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: #0f172a;
+      }
+
+      .ctf-pill {
+        border-radius: 999px;
+        border: 1px solid rgba(15, 23, 42, 0.2);
+        padding: 0.25rem 0.8rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #0f172a;
+        background: #ffffff;
+      }
+
+      .ctf-card-desc {
+        margin: 0.9rem 0 0 0;
+        color: #475569;
+      }
+
+      .ctf-card-hint {
+        margin: 0.35rem 0 0 0;
+        color: #94a3b8;
+        font-size: 0.85rem;
+      }
+
+      .ctf-input-row {
+        margin-top: 0.9rem;
+        display: grid;
+        gap: 0.6rem;
+      }
+
+      .ctf-input {
+        border-radius: 0.75rem;
+        border: 1px solid rgba(15, 23, 42, 0.2);
+        padding: 0.7rem 0.9rem;
+        font-size: 0.9rem;
+      }
+
+      .ctf-submit {
+        border-radius: 0.75rem;
+        border: none;
+        background: #0f172a;
+        color: #ffffff;
+        font-weight: 600;
+        padding: 0.7rem 1rem;
+        cursor: pointer;
+      }
+
+      .ctf-submit:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .ctf-card-status {
+        margin: 0.6rem 0 0 0;
+        font-weight: 600;
+        color: #0f172a;
+      }
+
+      .ctf-card-status.solved {
+        color: #059669;
+      }
+
+      .ctf-table-wrap {
+        margin-top: 1.25rem;
+        overflow-x: auto;
+      }
+
+      .ctf-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+      }
+
+      .ctf-table thead tr {
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        font-size: 0.65rem;
+        color: #64748b;
+      }
+
+      .ctf-table tbody tr {
+        border-top: 1px solid rgba(15, 23, 42, 0.08);
+      }
+
+      .ctf-table td,
+      .ctf-table th {
+        padding: 0.75rem 0.5rem;
+      }
+
+      .ctf-table .rank {
+        font-weight: 700;
+        color: #0f172a;
+      }
+
+      .ctf-table .score {
+        font-weight: 700;
+        color: #be123c;
+      }
+
+      .ctf-table .muted {
+        color: #94a3b8;
+        font-size: 0.8rem;
+      }
+
+      .ctf-empty {
+        margin: 1rem 0 0 0;
+        color: #94a3b8;
+      }
+
+      .ctf-error {
+        color: #dc2626;
+        font-weight: 600;
+      }
+
+      @media (min-width: 768px) {
+        .ctf-stats {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .ctf-input-row {
+          grid-template-columns: 1fr auto;
+          align-items: center;
+        }
+      }
+    `,
+  ],
 })
 export class CtfComponent {
   readonly challenges = signal<Challenge[]>([]);

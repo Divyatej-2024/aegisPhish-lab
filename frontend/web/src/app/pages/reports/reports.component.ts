@@ -82,7 +82,7 @@ import { apiFetch } from "../../lib/api";
         <div class="rounded-lg border border-gray-200 dark:border-gray-800 p-4">
           <h2 class="text-sm font-semibold">Create Campaign</h2>
           <p class="mt-1 text-xs text-gray-600 dark:text-gray-400">
-            Add targets as one per line. Example: Jane Doe &lt;jane@acme.com&gt;.
+            Add targets as one per line. Example: Jane Doe &lt;jane&#64;acme.com&gt;.
           </p>
 
           <div class="mt-4 grid gap-3">

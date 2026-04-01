@@ -1,0 +1,48 @@
+model PhishCampaign {
+  id          String        @id @default(uuid()) @map("_id")
+  name        String
+  description String?
+  status      String        @default("draft")
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  targets     PhishTarget[]
+  events      PhishEvent[]
+
+  @@map("phish_campaign")
+}
+
+model PhishTarget {
+  id          String       @id @default(uuid()) @map("_id")
+  campaignId  String
+  email       String
+  name        String?
+  department  String?
+  token       String       @unique
+  status      String       @default("pending")
+  sentAt      DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  campaign    PhishCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  events      PhishEvent[]
+
+  @@index([campaignId])
+  @@index([email])
+  @@map("phish_target")
+}
+
+model PhishEvent {
+  id         String        @id @default(uuid()) @map("_id")
+  campaignId String
+  targetId   String?
+  type       String
+  ipAddress  String?
+  userAgent  String?
+  metadata   Json?
+  createdAt  DateTime      @default(now())
+  campaign   PhishCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  target     PhishTarget?  @relation(fields: [targetId], references: [id], onDelete: Cascade)
+
+  @@index([campaignId, type])
+  @@index([targetId])
+  @@map("phish_event")
+}

@@ -97,6 +97,25 @@ type ScoreRow = {
             <p class="ctf-card-desc">{{ challenge.description }}</p>
             <p class="ctf-card-hint" *ngIf="challenge.hint">Hint: {{ challenge.hint }}</p>
 
+            <div class="ctf-incident" *ngIf="challenge.slug === 'attack-chain-sim'">
+              <div class="ctf-incident-header">
+                <p>Incident Notes (Fictional)</p>
+                <span>Case ID: AP-042</span>
+              </div>
+              <ul>
+                <li>08:14 - User reports a payroll email with a "Secure Doc" link.</li>
+                <li>08:16 - User opens link, sees fake login portal, enters credentials.</li>
+                <li>08:20 - Unknown device logs in from new IP using stolen creds.</li>
+                <li>08:22 - MFA prompt approved by user after push fatigue.</li>
+                <li>08:25 - New mail rule created to forward invoices externally.</li>
+                <li>08:31 - VPN connection established; internal file share accessed.</li>
+                <li>08:33 - Admin share probed with the same credentials.</li>
+              </ul>
+              <p class="ctf-incident-footer">
+                Question: Identify the technique used to pivot from phishing to internal access.
+              </p>
+            </div>
+
             <div class="ctf-input-row">
               <input
                 class="ctf-input"
@@ -360,6 +379,57 @@ type ScoreRow = {
         margin: 0.35rem 0 0 0;
         color: #94a3b8;
         font-size: 0.85rem;
+      }
+
+      .ctf-incident {
+        margin-top: 0.9rem;
+        border-radius: 0.9rem;
+        border: 1px dashed rgba(15, 23, 42, 0.2);
+        padding: 0.85rem 1rem;
+        background: #fef2f2;
+      }
+
+      .ctf-incident-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.75rem;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        color: #9f1239;
+        margin-bottom: 0.6rem;
+      }
+
+      .ctf-incident ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: grid;
+        gap: 0.35rem;
+        font-size: 0.88rem;
+        color: #4b5563;
+      }
+
+      .ctf-incident ul li {
+        padding-left: 0.75rem;
+        position: relative;
+      }
+
+      .ctf-incident ul li::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        background: #f97316;
+        border-radius: 999px;
+        position: absolute;
+        left: 0;
+        top: 0.5rem;
+      }
+
+      .ctf-incident-footer {
+        margin: 0.75rem 0 0 0;
+        font-weight: 600;
+        color: #0f172a;
       }
 
       .ctf-input-row {

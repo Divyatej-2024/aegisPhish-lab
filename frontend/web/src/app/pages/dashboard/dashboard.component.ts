@@ -1,5 +1,7 @@
 import { CommonModule } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, signal } from "@angular/core";
+
+import { apiFetch } from "../../lib/api";
 
 @Component({
   selector: "app-dashboard",
@@ -9,36 +11,63 @@ import { Component } from "@angular/core";
     <section class="container mx-auto max-w-6xl px-4 py-8 anim-fade-up">
       <h1 class="text-xl font-semibold">User Dashboard</h1>
       <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
-        Quick view of activity, status, and recent changes.
+        Your training progress, simulator performance, and activity timeline.
       </p>
 
-      <div class="mt-6 grid gap-4 md:grid-cols-3 anim-stagger">
+      <div class="mt-6 grid gap-4 md:grid-cols-4 anim-stagger">
         <div class="rounded-lg border border-gray-200 dark:border-gray-800 p-4">
-          <h2 class="text-sm font-medium">Active Projects</h2>
-          <p class="mt-2 text-2xl font-semibold">3</p>
-          <p class="text-xs text-gray-500">across 2 teams</p>
+          <h2 class="text-sm font-medium">Sim Runs</h2>
+          <p class="mt-2 text-2xl font-semibold">{{ summary()?.simRuns ?? 0 }}</p>
+          <p class="text-xs text-gray-500">walkthrough levels</p>
         </div>
         <div class="rounded-lg border border-gray-200 dark:border-gray-800 p-4">
-          <h2 class="text-sm font-medium">Open Alerts</h2>
-          <p class="mt-2 text-2xl font-semibold">1</p>
-          <p class="text-xs text-gray-500">needs review</p>
+          <h2 class="text-sm font-medium">Lab Runs</h2>
+          <p class="mt-2 text-2xl font-semibold">{{ summary()?.labRuns ?? 0 }}</p>
+          <p class="text-xs text-gray-500">scenario drills</p>
         </div>
         <div class="rounded-lg border border-gray-200 dark:border-gray-800 p-4">
-          <h2 class="text-sm font-medium">Last Login</h2>
-          <p class="mt-2 text-2xl font-semibold">Today</p>
-          <p class="text-xs text-gray-500">08:21</p>
+          <h2 class="text-sm font-medium">CTF Submissions</h2>
+          <p class="mt-2 text-2xl font-semibold">{{ summary()?.ctfSubmissions ?? 0 }}</p>
+          <p class="text-xs text-gray-500">practice flags</p>
+        </div>
+        <div class="rounded-lg border border-gray-200 dark:border-gray-800 p-4">
+          <h2 class="text-sm font-medium">Latest Sim Score</h2>
+          <p class="mt-2 text-2xl font-semibold">
+            {{ summary()?.latestSimScore ?? "--" }}
+          </p>
+          <p class="text-xs text-gray-500">most recent level</p>
         </div>
       </div>
 
       <div class="mt-8 rounded-lg border border-gray-200 dark:border-gray-800 p-4 anim-fade">
-        <h2 class="text-sm font-medium">Activity Feed</h2>
-        <ul class="mt-3 space-y-2 text-sm text-gray-600 dark:text-gray-400">
-          <li>Report export completed</li>
-          <li>Security policy updated</li>
-          <li>Billing invoice paid</li>
-        </ul>
+        <h2 class="text-sm font-medium">Last Activity</h2>
+        <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+          {{ formatDate(summary()?.lastActivity) }}
+        </p>
       </div>
     </section>
   `,
 })
-export class DashboardComponent {}
+export class DashboardComponent {
+  readonly summary = signal<any | null>(null);
+
+  constructor() {
+    void this.loadSummary();
+  }
+
+  async loadSummary() {
+    try {
+      const response = await apiFetch("/api/me/summary");
+      if (!response.ok) return;
+      const payload = await response.json();
+      this.summary.set(payload.summary ?? null);
+    } catch {
+      this.summary.set(null);
+    }
+  }
+
+  formatDate(value: string | null) {
+    if (!value) return "No recent activity yet.";
+    return new Date(value).toLocaleString();
+  }
+}

@@ -46,6 +46,61 @@ import { getIdTokenClaims } from "../../lib/firebase-auth";
           </div>
         </div>
 
+        <div class="mt-6 grid gap-4 md:grid-cols-3 anim-stagger" *ngIf="summary()">
+          <div class="rounded-md border border-gray-200 dark:border-gray-800 p-4">
+            <h3 class="text-xs font-semibold text-gray-500">Total Users</h3>
+            <p class="mt-2 text-2xl font-semibold">{{ summary()?.users }}</p>
+          </div>
+          <div class="rounded-md border border-gray-200 dark:border-gray-800 p-4">
+            <h3 class="text-xs font-semibold text-gray-500">Active Campaigns</h3>
+            <p class="mt-2 text-2xl font-semibold">{{ summary()?.campaigns }}</p>
+          </div>
+          <div class="rounded-md border border-gray-200 dark:border-gray-800 p-4">
+            <h3 class="text-xs font-semibold text-gray-500">Phish Events</h3>
+            <p class="mt-2 text-2xl font-semibold">{{ summary()?.phishEvents }}</p>
+          </div>
+        </div>
+
+        <div class="mt-6 grid gap-4 lg:grid-cols-[1.4fr_0.6fr]" *ngIf="analytics()">
+          <div class="rounded-md border border-gray-200 dark:border-gray-800 p-4">
+            <h3 class="text-xs font-semibold text-gray-500">Campaign Analytics (7 days)</h3>
+            <div class="mt-3 overflow-x-auto">
+              <table class="min-w-full text-left text-xs">
+                <thead class="border-b border-gray-200 dark:border-gray-800 text-gray-500">
+                  <tr>
+                    <th class="px-3 py-2 font-medium">Campaign</th>
+                    <th class="px-3 py-2 font-medium">Status</th>
+                    <th class="px-3 py-2 font-medium">Opens</th>
+                    <th class="px-3 py-2 font-medium">Clicks</th>
+                    <th class="px-3 py-2 font-medium">Submits</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let row of analytics()?.campaignRows" class="border-b border-gray-100 dark:border-gray-900">
+                    <td class="px-3 py-2">{{ row.name }}</td>
+                    <td class="px-3 py-2 capitalize">{{ row.status }}</td>
+                    <td class="px-3 py-2">{{ row.opens }}</td>
+                    <td class="px-3 py-2">{{ row.clicks }}</td>
+                    <td class="px-3 py-2">{{ row.submits }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="rounded-md border border-gray-200 dark:border-gray-800 p-4">
+            <h3 class="text-xs font-semibold text-gray-500">Risky Users</h3>
+            <ul class="mt-3 space-y-2 text-xs text-gray-600 dark:text-gray-400">
+              <li *ngFor="let user of analytics()?.riskyUsers">
+                {{ user.email }} — score {{ user.score }}
+              </li>
+              <li *ngIf="analytics()?.riskyUsers?.length === 0">No recent risky actions.</li>
+            </ul>
+            <div class="mt-4 text-xs text-gray-500">
+              Sim runs: {{ analytics()?.simRuns }} · Lab runs: {{ analytics()?.labRuns }}
+            </div>
+          </div>
+        </div>
+
         <div class="mt-8">
           <div class="rounded-md border border-gray-200 dark:border-gray-800 p-4 anim-fade">
             <h2 class="text-sm font-semibold">Admin Actions</h2>
@@ -158,6 +213,12 @@ import { getIdTokenClaims } from "../../lib/firebase-auth";
                         >
                           {{ user.banned ? "Enable" : "Disable" }}
                         </button>
+                        <button
+                          class="rounded-full border border-gray-300 px-3 py-1 text-[11px]"
+                          (click)="promptRole(user)"
+                        >
+                          Set role
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -178,6 +239,8 @@ import { getIdTokenClaims } from "../../lib/firebase-auth";
 export class AdminComponent {
   private readonly sessionData = signal<any | null>(null);
   private readonly usersData = signal<any[]>([]);
+  readonly summary = signal<any | null>(null);
+  readonly analytics = signal<any | null>(null);
   readonly loading = signal(true);
   readonly error = signal<string | null>(null);
   readonly creating = signal(false);
@@ -195,6 +258,8 @@ export class AdminComponent {
   constructor() {
     startAuthListener();
     void this.loadUsers();
+    void this.loadSummary();
+    void this.loadAnalytics();
   }
 
   async loadUsers() {
@@ -270,12 +335,40 @@ export class AdminComponent {
     }
   }
 
+  async loadSummary() {
+    try {
+      const response = await apiFetch("/api/admin/summary");
+      if (!response.ok) return;
+      const payload = await response.json();
+      this.summary.set(payload.summary ?? null);
+    } catch {
+      this.summary.set(null);
+    }
+  }
+
+  async loadAnalytics() {
+    try {
+      const response = await apiFetch("/api/admin/analytics");
+      if (!response.ok) return;
+      const payload = await response.json();
+      this.analytics.set(payload.analytics ?? null);
+    } catch {
+      this.analytics.set(null);
+    }
+  }
+
   async toggleAdmin(user: { uid: string; admin?: boolean }) {
     await this.updateUser(user.uid, { admin: !user.admin });
   }
 
   async toggleDisabled(user: { uid: string; banned?: boolean }) {
     await this.updateUser(user.uid, { disabled: !user.banned });
+  }
+
+  async promptRole(user: { uid: string; role?: string }) {
+    const next = window.prompt("Enter role (admin, trainer, user):", user.role ?? "user");
+    if (next === null) return;
+    await this.updateUser(user.uid, { role: next.trim() });
   }
 
   private async updateUser(uid: string, payload: Record<string, unknown>) {

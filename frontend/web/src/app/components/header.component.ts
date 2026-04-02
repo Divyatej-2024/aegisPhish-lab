@@ -68,6 +68,13 @@ import { signOutUser } from "../lib/firebase-auth";
           Training
         </a>
         <a
+          routerLink="/simulator"
+          routerLinkActive="text-gray-900 dark:text-gray-100"
+          class="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+        >
+          Simulator
+        </a>
+        <a
           routerLink="/ctf"
           routerLinkActive="text-gray-900 dark:text-gray-100"
           class="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"

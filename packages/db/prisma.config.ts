@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import path from "node:path";
 
 dotenv.config({
-  path: "../../apps/server/.env",
+  path: "../../backend/server/.env",
 });
 
 export default {

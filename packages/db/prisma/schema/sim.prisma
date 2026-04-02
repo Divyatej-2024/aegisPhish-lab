@@ -1,0 +1,45 @@
+model SimLevel {
+  id          String   @id @default(uuid()) @map("_id")
+  slug        String   @unique
+  title       String
+  summary     String
+  category    String
+  difficulty  String
+  order       Int
+  content     Json
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  runs        SimRun[]
+
+  @@map("sim_level")
+}
+
+model SimRun {
+  id          String    @id @default(uuid()) @map("_id")
+  levelId     String
+  userId      String
+  status      String    @default("in_progress")
+  score       Int       @default(0)
+  startedAt   DateTime  @default(now())
+  completedAt DateTime?
+  level       SimLevel  @relation(fields: [levelId], references: [id], onDelete: Cascade)
+  actions     SimAction[]
+
+  @@index([userId])
+  @@map("sim_run")
+}
+
+model SimAction {
+  id        String   @id @default(uuid()) @map("_id")
+  runId     String
+  stepIndex Int
+  type      String
+  label     String?
+  score     Int
+  metadata  Json?
+  createdAt DateTime @default(now())
+  run       SimRun   @relation(fields: [runId], references: [id], onDelete: Cascade)
+
+  @@index([runId, type])
+  @@map("sim_action")
+}

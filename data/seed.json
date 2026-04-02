@@ -1,0 +1,553 @@
+{
+  "users": [
+    {
+      "id": "user_7c6b0b9e-1d9f-4d73-9f0b-3f0f6d2a3a01",
+      "name": "Divya Tej",
+      "email": "divya.tej@aegisphish.com",
+      "emailVerified": true,
+      "twoFactorEnabled": true,
+      "role": "admin",
+      "banned": false,
+      "banReason": null,
+      "banExpires": null,
+      "image": null,
+      "createdAt": "2026-03-28T09:12:00.000Z",
+      "updatedAt": "2026-04-02T00:40:00.000Z"
+    },
+    {
+      "id": "user_3a55f8e1-2fd2-4a0a-9c2f-9dbf0f40f2b1",
+      "name": "Samira Khan",
+      "email": "samira.khan@aegisphish.com",
+      "emailVerified": true,
+      "twoFactorEnabled": false,
+      "role": "user",
+      "banned": false,
+      "banReason": null,
+      "banExpires": null,
+      "image": null,
+      "createdAt": "2026-03-29T10:15:00.000Z",
+      "updatedAt": "2026-04-01T14:10:00.000Z"
+    },
+    {
+      "id": "user_9c9d27a4-8d05-43f9-9d9b-3b9f0a1a71aa",
+      "name": "Liam O'Connor",
+      "email": "liam.oconnor@aegisphish.com",
+      "emailVerified": false,
+      "twoFactorEnabled": false,
+      "role": "user",
+      "banned": false,
+      "banReason": null,
+      "banExpires": null,
+      "image": null,
+      "createdAt": "2026-03-30T16:40:00.000Z",
+      "updatedAt": "2026-04-01T08:55:00.000Z"
+    }
+  ],
+  "sessions": [
+    {
+      "id": "sess_69c9f53b-2d27-4b74-8f6c-8ecb4f89c27d",
+      "expiresAt": "2026-04-09T10:00:00.000Z",
+      "token": "sess_live_5ca8a17d4d2f",
+      "createdAt": "2026-04-02T00:10:00.000Z",
+      "updatedAt": "2026-04-02T00:10:00.000Z",
+      "ipAddress": "203.0.113.12",
+      "userAgent": "Chrome 146 / Windows",
+      "impersonatedBy": null,
+      "userId": "user_7c6b0b9e-1d9f-4d73-9f0b-3f0f6d2a3a01"
+    },
+    {
+      "id": "sess_7d2be7e4-3ab9-4b2d-8f34-496a3bde5e4f",
+      "expiresAt": "2026-04-08T18:00:00.000Z",
+      "token": "sess_live_f5a1c40b8a99",
+      "createdAt": "2026-04-01T18:02:00.000Z",
+      "updatedAt": "2026-04-01T18:10:00.000Z",
+      "ipAddress": "198.51.100.24",
+      "userAgent": "Safari 17 / macOS",
+      "impersonatedBy": null,
+      "userId": "user_3a55f8e1-2fd2-4a0a-9c2f-9dbf0f40f2b1"
+    }
+  ],
+  "accounts": [
+    {
+      "id": "acct_5c939fda-3b45-4c2e-9c12-c8b44b4b2b21",
+      "accountId": "firebase:divya",
+      "providerId": "password",
+      "userId": "user_7c6b0b9e-1d9f-4d73-9f0b-3f0f6d2a3a01",
+      "accessToken": null,
+      "refreshToken": null,
+      "idToken": null,
+      "accessTokenExpiresAt": null,
+      "refreshTokenExpiresAt": null,
+      "scope": null,
+      "password": "hashed:***",
+      "createdAt": "2026-03-28T09:12:00.000Z",
+      "updatedAt": "2026-04-02T00:20:00.000Z"
+    },
+    {
+      "id": "acct_b8c2df21-dcad-4d4d-8df2-3d7d2a94d41d",
+      "accountId": "firebase:samira",
+      "providerId": "password",
+      "userId": "user_3a55f8e1-2fd2-4a0a-9c2f-9dbf0f40f2b1",
+      "accessToken": null,
+      "refreshToken": null,
+      "idToken": null,
+      "accessTokenExpiresAt": null,
+      "refreshTokenExpiresAt": null,
+      "scope": null,
+      "password": "hashed:***",
+      "createdAt": "2026-03-29T10:15:00.000Z",
+      "updatedAt": "2026-04-01T14:10:00.000Z"
+    }
+  ],
+  "verifications": [
+    {
+      "id": "ver_1f7d7a2a-2dd0-4e0f-9a97-95b7af2f4d10",
+      "identifier": "verify:liam.oconnor@aegisphish.com",
+      "value": "915224",
+      "expiresAt": "2026-04-02T02:00:00.000Z",
+      "createdAt": "2026-04-02T01:30:00.000Z",
+      "updatedAt": "2026-04-02T01:30:00.000Z"
+    }
+  ],
+  "twoFactor": [
+    {
+      "id": "2fa_6b5c7bb1-1a84-4c0e-8b3f-9d6e2b7f2f9a",
+      "userId": "user_7c6b0b9e-1d9f-4d73-9f0b-3f0f6d2a3a01",
+      "secret": "base32:***",
+      "backupCodes": "codes:***",
+      "createdAt": "2026-03-30T08:20:00.000Z",
+      "updatedAt": "2026-04-01T11:05:00.000Z"
+    }
+  ],
+  "ctfChallenges": [
+    {
+      "id": "ctf_2b28c444-9b8d-4d2f-9f03-6f1164ed1a21",
+      "slug": "osint-invisible-note",
+      "title": "Invisible Note",
+      "description": "Find the hidden flag left in the page source.",
+      "hint": "Right-click the page and view source.",
+      "category": "OSINT",
+      "points": 50,
+      "flagHash": "cbb2a4f2d16f0c2d0c9e0d0b67e4f4f0e9b3b2c8f84e6e8e1f3f2a1f0e1d9a2b",
+      "createdAt": "2026-03-25T10:00:00.000Z",
+      "updatedAt": "2026-03-25T10:00:00.000Z"
+    },
+    {
+      "id": "ctf_64b3e9c1-9f77-4e5c-98d8-c3d7aaf5f341",
+      "slug": "crypto-base64-drop",
+      "title": "Base64 Drop",
+      "description": "Decode the base64 payload to recover the flag.",
+      "hint": "Use any base64 decoder.",
+      "category": "Crypto",
+      "points": 75,
+      "flagHash": "74c5398bfe97b8d2f1f573c7e7d4b9a9c3f2d1c0b1a99887766554433221100f",
+      "createdAt": "2026-03-25T10:05:00.000Z",
+      "updatedAt": "2026-03-25T10:05:00.000Z"
+    },
+    {
+      "id": "ctf_8eaf1d92-47c8-44af-a0f4-ff9977a1c8d1",
+      "slug": "web-cookie-crumbs",
+      "title": "Cookie Crumbs",
+      "description": "Set a cookie named ap_ctf_token with value trustno1.",
+      "hint": "DevTools > Application > Cookies.",
+      "category": "Web",
+      "points": 100,
+      "flagHash": "0f1e2d3c4b5a69788796a5b4c3d2e1f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6",
+      "createdAt": "2026-03-25T10:10:00.000Z",
+      "updatedAt": "2026-03-25T10:10:00.000Z"
+    }
+  ],
+  "ctfSubmissions": [
+    {
+      "id": "ctfsub_77a5b0be-1e48-4a70-8b78-2f3a2a2d5c10",
+      "userId": "user_3a55f8e1-2fd2-4a0a-9c2f-9dbf0f40f2b1",
+      "userName": "Samira Khan",
+      "userEmail": "samira.khan@aegisphish.com",
+      "challengeId": "ctf_2b28c444-9b8d-4d2f-9f03-6f1164ed1a21",
+      "correct": true,
+      "flagHash": "cbb2a4f2d16f0c2d0c9e0d0b67e4f4f0e9b3b2c8f84e6e8e1f3f2a1f0e1d9a2b",
+      "submittedAt": "2026-04-01T12:02:00.000Z"
+    }
+  ],
+  "labScenarios": [
+    {
+      "id": "lab_5a04d2b2-9c1f-4ef1-8d2b-0a2c98f7bb21",
+      "slug": "invoice-fraud-triage",
+      "title": "Invoice Fraud Triage",
+      "summary": "Spot red flags in a payment change request and choose the safest response.",
+      "category": "Business Email Compromise",
+      "difficulty": "Intermediate",
+      "estimatedMinutes": 8,
+      "tags": ["email", "finance", "social-engineering"],
+      "type": "email-triage",
+      "steps": {
+        "intro": "A vendor claims their banking details changed. Your job is to decide how to respond without leaking data.",
+        "artifact": {
+          "from": "ap@northwind-suppliers.com",
+          "replyTo": "northwind-ap@outlook-mail.com",
+          "subject": "Urgent: Updated payment details for April invoice",
+          "body": "Hi team, we switched banks. Please use the new account details attached and confirm once the April invoice is scheduled. We are on a tight deadline. Thanks!",
+          "attachments": ["APRIL_INVOICE_UPDATE.pdf"]
+        },
+        "questions": [
+          {
+            "prompt": "What is the most suspicious indicator?",
+            "options": [
+              "The request is urgent",
+              "The reply-to domain differs from the sender domain",
+              "The email has an attachment",
+              "The message is short"
+            ],
+            "correctIndex": 1,
+            "explanation": "A mismatched reply-to domain is a strong sign of email spoofing or compromise."
+          }
+        ]
+      },
+      "createdAt": "2026-03-31T09:20:00.000Z",
+      "updatedAt": "2026-04-01T09:20:00.000Z"
+    },
+    {
+      "id": "lab_6b3d01a9-72f0-4fb6-b4b6-0420d5f9c903",
+      "slug": "mfa-fatigue-attack",
+      "title": "MFA Fatigue Attack",
+      "summary": "Handle repeated MFA prompts without enabling account takeover.",
+      "category": "Authentication",
+      "difficulty": "Beginner",
+      "estimatedMinutes": 6,
+      "tags": ["mfa", "identity", "alerts"],
+      "type": "mfa-fatigue",
+      "steps": {
+        "intro": "You receive a burst of MFA push notifications while in a meeting. Decide how to respond.",
+        "artifact": {
+          "prompts": 6,
+          "timeWindow": "2 minutes",
+          "location": "Unrecognized device, Berlin"
+        },
+        "questions": [
+          {
+            "prompt": "What should you do first?",
+            "options": [
+              "Approve one prompt to stop the alerts",
+              "Ignore all prompts and continue working",
+              "Report the prompts and reset your password",
+              "Turn off MFA temporarily"
+            ],
+            "correctIndex": 2,
+            "explanation": "Report the incident and reset credentials to stop credential stuffing and alert spam."
+          }
+        ]
+      },
+      "createdAt": "2026-03-31T09:25:00.000Z",
+      "updatedAt": "2026-04-01T09:25:00.000Z"
+    },
+    {
+      "id": "lab_2c9d72dd-7f50-4b4d-9cb3-509ae8b0a843",
+      "slug": "qr-code-payroll",
+      "title": "QR Payroll Update",
+      "summary": "Evaluate a QR code request that claims to update payroll details.",
+      "category": "QR Phishing",
+      "difficulty": "Intermediate",
+      "estimatedMinutes": 7,
+      "tags": ["qr", "mobile", "payroll"],
+      "type": "qr-phish",
+      "steps": {
+        "intro": "An HR email asks employees to scan a QR code to update direct deposit settings.",
+        "artifact": {
+          "sender": "hr@company-payroll.com",
+          "qrLabel": "Scan to update bank details",
+          "urlPreview": "http://payroll-update.company-payroll.com/login"
+        },
+        "questions": [
+          {
+            "prompt": "What is the highest risk in this message?",
+            "options": [
+              "The message targets payroll information",
+              "The link uses HTTP instead of HTTPS",
+              "It asks for bank details immediately",
+              "All of the above"
+            ],
+            "correctIndex": 3,
+            "explanation": "Payroll phishing combines urgency, sensitive data, and insecure links."
+          }
+        ]
+      },
+      "createdAt": "2026-03-31T09:30:00.000Z",
+      "updatedAt": "2026-04-01T09:30:00.000Z"
+    }
+  ],
+  "labRuns": [
+    {
+      "id": "labrun_a2f9f3f7-4db5-4e9c-8c2c-3f8a5b7b1c77",
+      "scenarioId": "lab_5a04d2b2-9c1f-4ef1-8d2b-0a2c98f7bb21",
+      "userId": "user_3a55f8e1-2fd2-4a0a-9c2f-9dbf0f40f2b1",
+      "status": "completed",
+      "score": 1,
+      "answers": {
+        "answers": [1],
+        "graded": [
+          {
+            "prompt": "What is the most suspicious indicator?",
+            "selectedIndex": 1,
+            "correctIndex": 1,
+            "correct": true,
+            "explanation": "A mismatched reply-to domain is a strong sign of email spoofing or compromise."
+          }
+        ],
+        "total": 1
+      },
+      "startedAt": "2026-04-01T12:40:00.000Z",
+      "completedAt": "2026-04-01T12:48:00.000Z"
+    }
+  ],
+  "labEvents": [
+    {
+      "id": "labevt_197b0f4a-1265-4d0b-b0b9-9b6e5a6abf32",
+      "runId": "labrun_a2f9f3f7-4db5-4e9c-8c2c-3f8a5b7b1c77",
+      "type": "start",
+      "metadata": { "source": "training-page" },
+      "createdAt": "2026-04-01T12:40:00.000Z"
+    }
+  ],
+  "phishCampaigns": [
+    {
+      "id": "camp_6a1cbb3b-4e35-45a0-8c9c-0c9851b9e0f2",
+      "name": "Q2 Payroll Awareness",
+      "description": "Payroll reset simulation for finance team.",
+      "status": "active",
+      "createdAt": "2026-04-01T09:00:00.000Z",
+      "updatedAt": "2026-04-01T12:00:00.000Z"
+    },
+    {
+      "id": "camp_7b2fa5a1-0c54-4a23-8d5b-28a0f96d0f2a",
+      "name": "Vendor Wire Fraud Drill",
+      "description": "BEC simulation for procurement group.",
+      "status": "draft",
+      "createdAt": "2026-04-01T13:30:00.000Z",
+      "updatedAt": "2026-04-01T13:30:00.000Z"
+    }
+  ],
+  "phishTargets": [
+    {
+      "id": "target_2f8a3f59-4b46-4e5a-bb3d-cc2b52bde9f1",
+      "campaignId": "camp_6a1cbb3b-4e35-45a0-8c9c-0c9851b9e0f2",
+      "email": "samira.khan@aegisphish.com",
+      "name": "Samira Khan",
+      "department": "Finance",
+      "token": "d4f6a9b1a1f74a5e8f4b7b0e1c8a9d2f",
+      "status": "submitted",
+      "sentAt": "2026-04-01T09:10:00.000Z",
+      "createdAt": "2026-04-01T09:05:00.000Z",
+      "updatedAt": "2026-04-01T09:25:00.000Z"
+    },
+    {
+      "id": "target_8f9f2e63-2a7a-4a19-9e9e-3cf4a0c2b6d1",
+      "campaignId": "camp_6a1cbb3b-4e35-45a0-8c9c-0c9851b9e0f2",
+      "email": "liam.oconnor@aegisphish.com",
+      "name": "Liam O'Connor",
+      "department": "Finance",
+      "token": "f2d1c0b9a8e7d6c5b4a392817261504f",
+      "status": "clicked",
+      "sentAt": "2026-04-01T09:12:00.000Z",
+      "createdAt": "2026-04-01T09:06:00.000Z",
+      "updatedAt": "2026-04-01T09:20:00.000Z"
+    }
+  ],
+  "phishEvents": [
+    {
+      "id": "phevt_6fa6f5ef-08bc-4dcb-9e28-73b72b4ec1c8",
+      "campaignId": "camp_6a1cbb3b-4e35-45a0-8c9c-0c9851b9e0f2",
+      "targetId": "target_2f8a3f59-4b46-4e5a-bb3d-cc2b52bde9f1",
+      "type": "open",
+      "ipAddress": "198.51.100.24",
+      "userAgent": "Safari 17 / macOS",
+      "metadata": null,
+      "createdAt": "2026-04-01T09:15:00.000Z"
+    },
+    {
+      "id": "phevt_aa6d4c72-82a2-4ff3-8190-1f4e7b7e2f11",
+      "campaignId": "camp_6a1cbb3b-4e35-45a0-8c9c-0c9851b9e0f2",
+      "targetId": "target_2f8a3f59-4b46-4e5a-bb3d-cc2b52bde9f1",
+      "type": "submit",
+      "ipAddress": "198.51.100.24",
+      "userAgent": "Safari 17 / macOS",
+      "metadata": { "email": "samira.khan@aegisphish.com", "passwordHash": "sha256:***", "passwordLength": 10 },
+      "createdAt": "2026-04-01T09:18:00.000Z"
+    },
+    {
+      "id": "phevt_3c1e8bf6-22b4-4f5a-9d9e-7a6c2e2e6f59",
+      "campaignId": "camp_6a1cbb3b-4e35-45a0-8c9c-0c9851b9e0f2",
+      "targetId": "target_8f9f2e63-2a7a-4a19-9e9e-3cf4a0c2b6d1",
+      "type": "click",
+      "ipAddress": "203.0.113.48",
+      "userAgent": "Chrome 146 / Windows",
+      "metadata": null,
+      "createdAt": "2026-04-01T09:17:00.000Z"
+    }
+  ],
+  "simLevels": [
+    {
+      "id": "simlvl_901d92e3-5b2c-4c6f-9f5f-9b14f8f1e8f2",
+      "slug": "payroll-password-reset",
+      "title": "Payroll Password Reset",
+      "summary": "A payroll portal forces a reset after a suspicious login alert.",
+      "category": "Credential Phish",
+      "difficulty": "Beginner",
+      "order": 1,
+      "content": {
+        "slug": "payroll-password-reset",
+        "title": "Payroll Password Reset",
+        "summary": "A payroll portal forces a reset after a suspicious login alert.",
+        "category": "Credential Phish",
+        "difficulty": "Beginner",
+        "order": 1,
+        "steps": [
+          {
+            "title": "Suspicious Payroll Alert",
+            "prompt": "What is the safest response?",
+            "email": {
+              "from": "payroll@company-payroll.com",
+              "replyTo": "payroll-helpdesk@support-mail.com",
+              "subject": "Action required: Reset payroll password",
+              "body": "We detected suspicious sign-ins on your payroll profile. Reset your password within 2 hours to avoid lockout.",
+              "linkText": "Reset payroll password",
+              "linkUrl": "http://company-payroll.com-reset.verify-user.com"
+            },
+            "actions": [
+              {
+                "type": "report",
+                "label": "Report to SOC and verify via intranet",
+                "score": 3,
+                "feedback": "Correct. Use official portals and report suspicious messages."
+              },
+              {
+                "type": "click",
+                "label": "Click the link to reset quickly",
+                "score": -2,
+                "feedback": "Risky. The URL is mismatched and uses an unsafe domain."
+              }
+            ]
+          }
+        ]
+      },
+      "createdAt": "2026-03-31T10:00:00.000Z",
+      "updatedAt": "2026-04-01T10:00:00.000Z"
+    },
+    {
+      "id": "simlvl_2c3b4d56-1e79-4f86-9eb1-07a1a8f43b21",
+      "slug": "executive-wire-request",
+      "title": "Executive Wire Request",
+      "summary": "A CFO requests a wire transfer for a confidential acquisition.",
+      "category": "Business Email Compromise",
+      "difficulty": "Intermediate",
+      "order": 2,
+      "content": {
+        "slug": "executive-wire-request",
+        "title": "Executive Wire Request",
+        "summary": "A CFO requests a wire transfer for a confidential acquisition.",
+        "category": "Business Email Compromise",
+        "difficulty": "Intermediate",
+        "order": 2,
+        "steps": [
+          {
+            "title": "CFO Urgent Wire",
+            "prompt": "How should you proceed?",
+            "email": {
+              "from": "cfo-office@company.com",
+              "replyTo": "cfo-office@company.com",
+              "subject": "Confidential: urgent wire transfer today",
+              "body": "We need a same-day wire for a strategic deal. I will send details once you confirm you are available."
+            },
+            "actions": [
+              {
+                "type": "report",
+                "label": "Escalate to finance lead and verify via phone",
+                "score": 3,
+                "feedback": "Correct. Use known channels and approvals for high-risk requests."
+              },
+              {
+                "type": "reply",
+                "label": "Confirm availability and await instructions",
+                "score": -1,
+                "feedback": "Risky. High-value transactions require verification before engagement."
+              }
+            ]
+          }
+        ]
+      },
+      "createdAt": "2026-03-31T10:05:00.000Z",
+      "updatedAt": "2026-04-01T10:05:00.000Z"
+    },
+    {
+      "id": "simlvl_7e4d2f19-50f0-47e1-9bb3-0af1a3a2d01b",
+      "slug": "cloud-doc-share",
+      "title": "Cloud Document Share",
+      "summary": "A shared document claims to contain updated HR policies.",
+      "category": "Attachment Phish",
+      "difficulty": "Intermediate",
+      "order": 3,
+      "content": {
+        "slug": "cloud-doc-share",
+        "title": "Cloud Document Share",
+        "summary": "A shared document claims to contain updated HR policies.",
+        "category": "Attachment Phish",
+        "difficulty": "Intermediate",
+        "order": 3,
+        "steps": [
+          {
+            "title": "Shared Policies Doc",
+            "prompt": "Choose the safest action.",
+            "email": {
+              "from": "hr@company-helpdesk.com",
+              "subject": "Updated policy pack - review today",
+              "body": "HR has updated the employee handbook. Download the pack and confirm receipt before end of day.",
+              "attachments": ["PolicyPack.zip"]
+            },
+            "actions": [
+              {
+                "type": "report",
+                "label": "Report and verify on the HR portal",
+                "score": 3,
+                "feedback": "Correct. Verify using trusted internal sources."
+              },
+              {
+                "type": "download",
+                "label": "Download the attachment to review",
+                "score": -2,
+                "feedback": "Unsafe. Compressed attachments are common malware delivery methods."
+              }
+            ]
+          }
+        ]
+      },
+      "createdAt": "2026-03-31T10:10:00.000Z",
+      "updatedAt": "2026-04-01T10:10:00.000Z"
+    }
+  ],
+  "simRuns": [
+    {
+      "id": "simrun_4a1f3d3d-bde5-4a1b-8d60-66a1f5b5e9c2",
+      "levelId": "simlvl_901d92e3-5b2c-4c6f-9f5f-9b14f8f1e8f2",
+      "userId": "user_9c9d27a4-8d05-43f9-9d9b-3b9f0a1a71aa",
+      "status": "completed",
+      "score": 1,
+      "startedAt": "2026-04-01T15:00:00.000Z",
+      "completedAt": "2026-04-01T15:04:00.000Z"
+    }
+  ],
+  "simActions": [
+    {
+      "id": "simact_5d0f8f15-6b22-4e8f-9e28-4d3f9b1c2a90",
+      "runId": "simrun_4a1f3d3d-bde5-4a1b-8d60-66a1f5b5e9c2",
+      "stepIndex": 0,
+      "type": "report",
+      "label": "Report to SOC and verify via intranet",
+      "score": 3,
+      "metadata": {
+        "note": "Reported to SOC",
+        "prediction": { "label": "phishing", "confidence": 0.82, "probabilities": { "phishing": 0.82, "legit": 0.18 }, "model": "heuristic-v1", "source": "heuristic" },
+        "feedback": "Correct. Use official portals and report suspicious messages."
+      },
+      "createdAt": "2026-04-01T15:02:00.000Z"
+    }
+  ]
+}

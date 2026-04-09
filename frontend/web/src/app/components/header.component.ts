@@ -26,6 +26,34 @@ import { signOutUser } from "../lib/firebase-auth";
           Home
         </a>
         <a
+          routerLink="/start"
+          routerLinkActive="text-gray-900 dark:text-gray-100"
+          class="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+        >
+          Start Here
+        </a>
+        <a
+          routerLink="/demo"
+          routerLinkActive="text-gray-900 dark:text-gray-100"
+          class="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+        >
+          Demo
+        </a>
+        <a
+          routerLink="/pricing"
+          routerLinkActive="text-gray-900 dark:text-gray-100"
+          class="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+        >
+          Pricing
+        </a>
+        <a
+          routerLink="/compliance"
+          routerLinkActive="text-gray-900 dark:text-gray-100"
+          class="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+        >
+          Compliance
+        </a>
+        <a
           routerLink="/dashboard"
           routerLinkActive="text-gray-900 dark:text-gray-100"
           class="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"

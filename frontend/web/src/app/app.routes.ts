@@ -16,9 +16,17 @@ import { TrainingComponent } from "./pages/training/training.component";
 import { AdminLoginComponent } from "./pages/admin-login/admin-login.component";
 import { CtfComponent } from "./pages/ctf/ctf.component";
 import { SimulatorComponent } from "./pages/simulator/simulator.component";
+import { StartComponent } from "./pages/start/start.component";
+import { DemoComponent } from "./pages/demo/demo.component";
+import { PricingComponent } from "./pages/pricing/pricing.component";
+import { ComplianceComponent } from "./pages/compliance/compliance.component";
 
 export const routes: Routes = [
   { path: "", component: HomeComponent },
+  { path: "start", component: StartComponent },
+  { path: "demo", component: DemoComponent },
+  { path: "pricing", component: PricingComponent },
+  { path: "compliance", component: ComplianceComponent },
   { path: "login", component: AuthComponent },
   { path: "dashboard", component: DashboardComponent, canActivate: [authGuard] },
   { path: "reports", component: ReportsComponent, canActivate: [authGuard] },

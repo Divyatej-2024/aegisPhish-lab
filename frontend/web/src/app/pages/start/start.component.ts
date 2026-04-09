@@ -74,18 +74,20 @@ import { RouterLink } from "@angular/router";
         <div class="rounded-2xl border border-gray-200/70 bg-white/70 p-6 dark:border-gray-800 dark:bg-gray-950/40">
           <h2 class="text-sm font-semibold">Backend deploy checklist</h2>
           <p class="mt-2 text-xs text-gray-600 dark:text-gray-400">
-            One-click backend deploy isn’t included yet, but this checklist gets you
+            One-click backend deploy isn't included yet, but this checklist gets you
             to a production-ready API fast.
           </p>
           <div class="mt-4 space-y-2 text-xs text-gray-700 dark:text-gray-300">
             <div class="rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 dark:border-gray-800 dark:bg-gray-900">
-              Set `MONGODB_URI` + `BETTER_AUTH_SECRET`
+              Set <code class="font-semibold">MONGODB_URI</code> +
+              <code class="font-semibold">BETTER_AUTH_SECRET</code>
             </div>
             <div class="rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 dark:border-gray-800 dark:bg-gray-900">
-              Run `pnpm db:push`
+              Run <code class="font-semibold">pnpm db:push</code>
             </div>
             <div class="rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 dark:border-gray-800 dark:bg-gray-900">
-              Deploy `backend/server` and expose `/api`
+              Deploy <code class="font-semibold">backend/server</code> and expose
+              <code class="font-semibold">/api</code>
             </div>
           </div>
         </div>

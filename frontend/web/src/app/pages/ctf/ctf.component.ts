@@ -542,8 +542,8 @@ export class CtfComponent {
   readonly activeTab = signal<"challenges" | "scoreboard">("challenges");
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
-  readonly flagInputs = signal<Record<string, string>>({});
-  readonly statusBySlug = signal<Record<string, string>>({});
+  readonly flagInputs = signal<Partial<Record<string, string>>>({});
+  readonly statusBySlug = signal<Partial<Record<string, string>>>({});
 
   readonly solvedSlugs = computed(() => new Set(this.progress()?.solvedSlugs ?? []));
 

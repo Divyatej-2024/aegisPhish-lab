@@ -1,45 +1,85 @@
 import { Routes } from "@angular/router";
 
-import { HomeComponent } from "./pages/home/home.component";
-import { AdminComponent } from "./pages/admin/admin.component";
 import { adminGuard } from "./guards/admin.guard";
 import { authGuard } from "./guards/auth.guard";
-import { DashboardComponent } from "./pages/dashboard/dashboard.component";
-import { BillingComponent } from "./pages/billing/billing.component";
-import { SupportComponent } from "./pages/support/support.component";
-import { ReportsComponent } from "./pages/reports/reports.component";
-import { ProfileComponent } from "./pages/profile/profile.component";
-import { SecurityComponent } from "./pages/security/security.component";
-import { SettingsComponent } from "./pages/settings/settings.component";
-import { AuthComponent } from "./pages/auth/auth.component";
-import { TrainingComponent } from "./pages/training/training.component";
-import { AdminLoginComponent } from "./pages/admin-login/admin-login.component";
-import { CtfComponent } from "./pages/ctf/ctf.component";
-import { SimulatorComponent } from "./pages/simulator/simulator.component";
-import { StartComponent } from "./pages/start/start.component";
-import { DemoComponent } from "./pages/demo/demo.component";
-import { PricingComponent } from "./pages/pricing/pricing.component";
-import { ComplianceComponent } from "./pages/compliance/compliance.component";
 
 export const routes: Routes = [
-  { path: "", component: HomeComponent },
-  { path: "start", component: StartComponent },
-  { path: "demo", component: DemoComponent },
-  { path: "pricing", component: PricingComponent },
-  { path: "compliance", component: ComplianceComponent },
-  { path: "login", component: AuthComponent },
-  { path: "dashboard", component: DashboardComponent, canActivate: [authGuard] },
-  { path: "reports", component: ReportsComponent, canActivate: [authGuard] },
-  { path: "billing", component: BillingComponent, canActivate: [authGuard] },
-  { path: "support", component: SupportComponent, canActivate: [authGuard] },
-  { path: "settings", component: SettingsComponent, canActivate: [authGuard] },
-  { path: "settings/profile", component: ProfileComponent, canActivate: [authGuard] },
-  { path: "settings/security", component: SecurityComponent, canActivate: [authGuard] },
-  { path: "training", component: TrainingComponent, canActivate: [authGuard] },
-  { path: "training/:page", component: TrainingComponent, canActivate: [authGuard] },
-  { path: "simulator", component: SimulatorComponent, canActivate: [authGuard] },
-  { path: "ctf", component: CtfComponent, canActivate: [authGuard] },
-  { path: "admin/login", component: AdminLoginComponent },
-  { path: "admin", component: AdminComponent, canActivate: [adminGuard], canMatch: [adminGuard] },
+  { path: "", loadComponent: () => import("./pages/home/home.component").then((m) => m.HomeComponent) },
+  { path: "start", loadComponent: () => import("./pages/start/start.component").then((m) => m.StartComponent) },
+  { path: "demo", loadComponent: () => import("./pages/demo/demo.component").then((m) => m.DemoComponent) },
+  {
+    path: "pricing",
+    loadComponent: () => import("./pages/pricing/pricing.component").then((m) => m.PricingComponent),
+  },
+  {
+    path: "compliance",
+    loadComponent: () => import("./pages/compliance/compliance.component").then((m) => m.ComplianceComponent),
+  },
+  { path: "login", loadComponent: () => import("./pages/auth/auth.component").then((m) => m.AuthComponent) },
+  {
+    path: "dashboard",
+    loadComponent: () => import("./pages/dashboard/dashboard.component").then((m) => m.DashboardComponent),
+    canActivate: [authGuard],
+  },
+  {
+    path: "reports",
+    loadComponent: () => import("./pages/reports/reports.component").then((m) => m.ReportsComponent),
+    canActivate: [authGuard],
+  },
+  {
+    path: "billing",
+    loadComponent: () => import("./pages/billing/billing.component").then((m) => m.BillingComponent),
+    canActivate: [authGuard],
+  },
+  {
+    path: "support",
+    loadComponent: () => import("./pages/support/support.component").then((m) => m.SupportComponent),
+    canActivate: [authGuard],
+  },
+  {
+    path: "settings",
+    loadComponent: () => import("./pages/settings/settings.component").then((m) => m.SettingsComponent),
+    canActivate: [authGuard],
+  },
+  {
+    path: "settings/profile",
+    loadComponent: () => import("./pages/profile/profile.component").then((m) => m.ProfileComponent),
+    canActivate: [authGuard],
+  },
+  {
+    path: "settings/security",
+    loadComponent: () => import("./pages/security/security.component").then((m) => m.SecurityComponent),
+    canActivate: [authGuard],
+  },
+  {
+    path: "training",
+    loadComponent: () => import("./pages/training/training.component").then((m) => m.TrainingComponent),
+    canActivate: [authGuard],
+  },
+  {
+    path: "training/:page",
+    loadComponent: () => import("./pages/training/training.component").then((m) => m.TrainingComponent),
+    canActivate: [authGuard],
+  },
+  {
+    path: "simulator",
+    loadComponent: () => import("./pages/simulator/simulator.component").then((m) => m.SimulatorComponent),
+    canActivate: [authGuard],
+  },
+  {
+    path: "ctf",
+    loadComponent: () => import("./pages/ctf/ctf.component").then((m) => m.CtfComponent),
+    canActivate: [authGuard],
+  },
+  {
+    path: "admin/login",
+    loadComponent: () => import("./pages/admin-login/admin-login.component").then((m) => m.AdminLoginComponent),
+  },
+  {
+    path: "admin",
+    loadComponent: () => import("./pages/admin/admin.component").then((m) => m.AdminComponent),
+    canActivate: [adminGuard],
+    canMatch: [adminGuard],
+  },
   { path: "**", redirectTo: "" },
 ];

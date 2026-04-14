@@ -1,5 +1,7 @@
 import prisma from "@aegisPhish-lab/db";
 
+type JsonValue = string | number | boolean | null | { [key: string]: JsonValue } | JsonValue[];
+
 export type LabQuestion = {
   prompt: string;
   options: string[];
@@ -18,7 +20,7 @@ export type LabScenarioSeed = {
   type: "email-triage" | "mfa-fatigue" | "qr-phish";
   steps: {
     intro: string;
-    artifact: Record<string, unknown>;
+    artifact: Record<string, JsonValue>;
     questions: LabQuestion[];
   };
 };

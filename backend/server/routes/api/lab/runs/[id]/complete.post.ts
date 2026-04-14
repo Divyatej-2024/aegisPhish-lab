@@ -22,7 +22,9 @@ export default defineEventHandler(async (event) => {
   }
 
   const body = await readBody(event);
-  const answers = Array.isArray(body?.answers) ? body.answers.map((value) => Number(value)) : [];
+  const answers = Array.isArray(body?.answers)
+    ? body.answers.map((value: unknown) => Number(value))
+    : [];
 
   const result = scoreScenario(run.scenario.steps as any, answers);
 

@@ -50,24 +50,29 @@ const parseTargetLine = (line: string): PhishTargetInput | null => {
 
 export const parseTargets = (input: unknown): PhishTargetInput[] => {
   if (Array.isArray(input)) {
-    return input
-      .map((item) => {
-        if (!item || typeof item !== "object") return null;
+    return input.flatMap((item): PhishTargetInput[] => {
+        if (!item || typeof item !== "object") return [];
         const name = typeof (item as any).name === "string" ? (item as any).name.trim() : undefined;
         const email = typeof (item as any).email === "string" ? (item as any).email.trim() : "";
         const department =
           typeof (item as any).department === "string" ? (item as any).department.trim() : undefined;
-        if (!email || !EMAIL_RE.test(email)) return null;
-        return { name, email, department };
-      })
-      .filter((value): value is PhishTargetInput => Boolean(value));
+        if (!email || !EMAIL_RE.test(email)) return [];
+
+        return [
+          {
+            ...(name ? { name } : {}),
+            email,
+            ...(department ? { department } : {}),
+          },
+        ];
+      });
   }
 
   if (typeof input === "string") {
-    return input
-      .split(/\r?\n|,/)
-      .map((line) => parseTargetLine(line))
-      .filter((value): value is PhishTargetInput => Boolean(value));
+    return input.split(/\r?\n|,/).flatMap((line) => {
+      const parsed = parseTargetLine(line);
+      return parsed ? [parsed] : [];
+    });
   }
 
   return [];

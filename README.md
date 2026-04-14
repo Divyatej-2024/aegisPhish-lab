@@ -1,101 +1,173 @@
 # AegisPhish Lab
 
-AegisPhish is a phishing readiness platform for security teams. It combines simulations,
-user training, and executive reporting in one suite so you can measure risk and prove
-improvement over time.
+AegisPhish Lab is a phishing detection and simulation platform built for security awareness teams and SOC-style workflows.
+It combines explainable phishing analysis, realistic phishing simulations, and readiness reporting in one stack.
 
-## Target Users
+## Why This Project Matters
 
-- Security operations teams
-- IT administrators managing user risk
-- Compliance and audit stakeholders
+Most phishing demos stop at a UI mock. AegisPhish Lab focuses on operational signals:
 
-## Start Here
+- Detection output with confidence and explicit reasons
+- Scenario-based phishing simulations with scored user actions
+- Campaign and user-risk data that can be used for coaching and reporting
 
-1. **Open the live demo**
-   Run `pnpm dev`, then visit `http://localhost:3001/demo` for a read-only preview.
-2. **Run the full stack**
-   Start the apps with `pnpm dev` after installing dependencies.
-3. **Connect MongoDB**
-   Add your MongoDB URI in `backend/server/.env`, then run `pnpm db:push`.
+## Core Capabilities
 
-## One-Click Deploy (Frontend Preview)
+- Email/text phishing analysis API (`/api/predict`, `/ai`)
+- Explainable detection response:
+  - `label` (`phishing` or `legit`)
+  - `confidence` and class probabilities
+  - ranked `reasons` with evidence snippets
+- Phishing walkthrough simulator (`/simulator`):
+  - credential reset scam
+  - executive wire request scam
+  - malicious document-share scam
+- Simulation analytics (`/api/sim/analysis`) with scoring and risky-action rates
+- Campaign and lab endpoints for training and readiness workflows
 
-You can deploy the Angular frontend as a preview on Vercel while you finish backend setup.
-Replace `YOUR_REPO_URL` with your fork URL.
+## Detection Logic (Explainable)
 
+The current engine uses a hybrid strategy:
+
+1. External ML model (optional)
+- If `ML_SERVER_URL` is configured, the backend calls `POST {ML_SERVER_URL}/predict`.
+
+2. Local heuristic fallback (always available)
+- If the ML server is unavailable, the platform scores suspicious indicators such as:
+  - urgency language (`urgent`, `immediately`)
+  - credential prompts (`password`, `login`, `reset`)
+  - financial fraud cues (`wire`, `invoice`, `payment`)
+  - unsafe links (`http://`)
+  - obfuscated links (shorteners like `bit.ly`)
+
+Example prediction payload:
+
+```json
+{
+  "label": "phishing",
+  "confidence": 0.84,
+  "probabilities": {
+    "phishing": 0.84,
+    "legit": 0.16
+  },
+  "reasons": [
+    {
+      "code": "unsafe-http-link",
+      "message": "Unsafe HTTP links can expose credentials through insecure transport.",
+      "evidence": "http://",
+      "weight": 0.2
+    },
+    {
+      "code": "urgency",
+      "message": "Urgency language increases pressure on the victim.",
+      "evidence": "urgent",
+      "weight": 0.08
+    }
+  ],
+  "model": "heuristic-v1",
+  "source": "heuristic"
+}
 ```
-https://vercel.com/new/clone?repository-url=YOUR_REPO_URL
+
+## System Architecture
+
+```mermaid
+flowchart TD
+    A[Angular Frontend\nfrontend/web] --> B[Nitro API\nbackend/server]
+    B --> C[Detection Engine\nml-client.ts]
+    C --> D{ML_SERVER_URL configured?}
+    D -->|Yes| E[External ML /predict]
+    D -->|No| F[Heuristic Engine]
+    B --> G[Prisma ORM\npackages/db]
+    G --> H[(MongoDB)]
+    B --> I[Firebase Token Verification]
+    B --> J[Simulation Engine\n/api/sim/*]
+    J --> H
 ```
-
-Vercel settings:
-
-- Build Command: `pnpm run build`
-- Output Directory: `frontend/web/dist/web/browser`
-- Env: `VITE_SERVER_URL` (API base URL)
-
-## Backend Deploy Checklist
-
-One-click backend deploy is not bundled yet. Use this checklist to ship the API:
-
-- Set `MONGODB_URI` in `backend/server/.env`
-- Set `BETTER_AUTH_SECRET` (and related auth envs)
-- Run `pnpm db:push` before deploying
-- Deploy `backend/server` and expose `/api`
-
-## What You Can Show in 60 Seconds
-
-- Executive readiness snapshot with risk, completion, and high-risk users
-- Campaign timeline with click-rate changes
-- Training completion and coaching signals
-
-## Features
-
-- **Phishing simulations** to measure user risk
-- **Training and labs** for awareness and skill-building
-- **Reporting** for leadership and compliance
-- **Admin console** for roles, permissions, and audit visibility
 
 ## Tech Stack
 
-- **Frontend**: Angular, Tailwind, daisyUI
-- **Backend**: Nitro, Zod
-- **Database**: MongoDB + Prisma
-- **Auth**: Better Auth
-- **Testing**: Vitest
-- **Email**: React Email
+- Frontend: Angular 19, Tailwind CSS, daisyUI
+- Backend: Nitro (h3), Zod
+- Database: MongoDB, Prisma
+- Auth: Firebase ID token verification + Better Auth package in workspace
+- Testing: Vitest
+- Monorepo tooling: Turbo, pnpm, Bun runtime support
 
-## Project Structure
+## Monorepo Structure
 
-```
+```text
 aegisPhish-lab/
 |-- frontend/
-|   |-- web/         # Frontend application (Angular)
+|   |-- web/         # Angular app
 |-- backend/
-|   |-- server/      # Backend API (Nitro)
-|-- ai/              # AI component (shared logic)
+|   |-- server/      # Nitro API
+|-- ai/              # AI package surface
 |-- packages/
-|   |-- auth/        # Authentication configuration & logic
-|   |-- config/      # Shared configs (tsconfig, lint)
-|   |-- db/          # Database schema & queries
-|   |-- env/         # Environment validation
+|   |-- auth/        # auth package
+|   |-- config/      # shared config
+|   |-- db/          # Prisma schema + seed
+|   |-- env/         # environment validation
 ```
 
-## Local Development
+## Quick Start
 
-1. Install dependencies:
-   `pnpm install`
-2. Start the dev servers:
-   `pnpm dev`
+1. Install dependencies
 
-Frontend runs at `http://localhost:3001` and API at `http://localhost:3000`.
+```bash
+pnpm install
+```
 
-## Available Scripts
+2. Configure backend environment in `backend/server/.env`
 
-- `pnpm dev`: Start all applications in development mode
-- `pnpm build`: Build all applications
-- `pnpm dev:web`: Start only the web application
-- `pnpm dev:server`: Start only the server
-- `pnpm check-types`: Check TypeScript types across all apps
-- `pnpm db:push`: Push schema changes to database
-- `pnpm db:studio`: Open database studio UI
+Required at minimum:
+
+```bash
+MONGODB_URI=...
+FIREBASE_PROJECT_ID=...
+FIREBASE_CLIENT_EMAIL=...
+FIREBASE_PRIVATE_KEY=...
+```
+
+Optional (for external model):
+
+```bash
+ML_SERVER_URL=http://localhost:8000
+```
+
+3. Prepare database
+
+```bash
+pnpm db:push
+pnpm db:seed
+```
+
+4. Run development stack
+
+```bash
+pnpm dev
+```
+
+Default local URLs:
+
+- Frontend: `http://localhost:3001`
+- Backend API: `http://localhost:3000`
+
+## Key Routes
+
+- `GET /demo` - read-only product demo
+- `GET /simulator` - interactive phishing walkthrough simulator (authenticated)
+- `POST /api/predict` - phishing prediction API (authenticated)
+- `GET /api/sim/levels` - simulator levels
+- `POST /api/sim/runs` - start simulation run
+- `POST /api/sim/runs/:id/actions` - submit action and receive detection + feedback
+
+## Portfolio Positioning
+
+This project is best presented as:
+
+- A phishing readiness platform
+- With explainable detection output
+- Plus user behavior simulation and measurable risk metrics
+
+If you are using this for interviews, show the simulator flow live and explain how detection reasons map to user coaching decisions.

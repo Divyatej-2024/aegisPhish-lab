@@ -105,10 +105,24 @@ import { apiFetch } from "../../lib/api";
                 <p>{{ actionResult()?.feedback }}</p>
                 <div class="prediction">
                   <span>Detection:</span>
-                  <strong>{{ actionResult()?.prediction?.label }}</strong>
+                  <strong class="caps">{{ actionResult()?.prediction?.label }}</strong>
                   <span class="muted">
-                    ({{ actionResult()?.prediction?.confidence | number : "1.0-2" }})
+                    ({{ (actionResult()?.prediction?.confidence ?? 0) * 100 | number : "1.0-0" }}%
+                    confidence)
                   </span>
+                </div>
+                <div class="prediction-meta" *ngIf="actionResult()?.prediction?.model">
+                  Model: {{ actionResult()?.prediction?.model }} | Source:
+                  {{ actionResult()?.prediction?.source }}
+                </div>
+                <div class="reason-list" *ngIf="actionResult()?.prediction?.reasons?.length">
+                  <div class="reason-title">Why it was flagged</div>
+                  <ul>
+                    <li *ngFor="let reason of actionResult()?.prediction?.reasons">
+                      <span>{{ reason.message }}</span>
+                      <code *ngIf="reason.evidence">{{ reason.evidence }}</code>
+                    </li>
+                  </ul>
                 </div>
                 <div class="score">Score: {{ runScore() }}</div>
                 <button class="secondary" (click)="nextStep()" [disabled]="!canAdvance()">
@@ -317,6 +331,49 @@ import { apiFetch } from "../../lib/api";
 
       .prediction {
         margin-top: 0.5rem;
+      }
+
+      .caps {
+        text-transform: uppercase;
+      }
+
+      .prediction-meta {
+        margin-top: 0.45rem;
+        font-size: 0.72rem;
+        color: #6b7280;
+      }
+
+      .reason-list {
+        margin-top: 0.75rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.6rem;
+        padding: 0.6rem;
+        background: #f8fafc;
+      }
+
+      .reason-title {
+        font-weight: 600;
+        margin-bottom: 0.35rem;
+      }
+
+      .reason-list ul {
+        margin: 0;
+        padding-left: 1rem;
+        display: grid;
+        gap: 0.35rem;
+      }
+
+      .reason-list li {
+        display: grid;
+        gap: 0.15rem;
+      }
+
+      .reason-list code {
+        font-size: 0.72rem;
+        width: fit-content;
+        background: #e5e7eb;
+        border-radius: 0.25rem;
+        padding: 0.1rem 0.35rem;
       }
 
       .muted {

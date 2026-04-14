@@ -38,7 +38,19 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: "Invalid step." });
   }
 
-  const prediction = await predictPhishing(step?.email?.body ?? "");
+  const predictionInput = [
+    step?.email?.from,
+    step?.email?.replyTo,
+    step?.email?.subject,
+    step?.email?.body,
+    step?.email?.linkText,
+    step?.email?.linkUrl,
+    Array.isArray(step?.email?.attachments) ? step.email.attachments.join(" ") : "",
+  ]
+    .filter((value) => typeof value === "string" && value.length > 0)
+    .join("\n");
+
+  const prediction = await predictPhishing(predictionInput);
   const scoring = scoreAction(type, levelContent, stepIndex);
 
   const action = await prisma.simAction.create({

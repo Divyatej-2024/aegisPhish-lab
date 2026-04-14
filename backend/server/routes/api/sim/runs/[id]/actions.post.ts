@@ -1,5 +1,6 @@
 import { createError, readBody } from "h3";
 import prisma from "@aegisPhish-lab/db";
+import { z } from "zod";
 
 import { requireFirebaseUser } from "../../../../../utils/require-firebase-user";
 import { predictPhishing } from "../../../../../utils/ml-client";
@@ -21,21 +22,45 @@ export default defineEventHandler(async (event) => {
   if (!run || run.userId !== user.uid) {
     throw createError({ statusCode: 404, statusMessage: "Run not found." });
   }
+  if (run.status === "completed") {
+    throw createError({ statusCode: 409, statusMessage: "Run is already completed." });
+  }
 
   const body = await readBody(event);
-  const stepIndex = Number(body?.stepIndex ?? 0);
-  const type = typeof body?.type === "string" ? body.type.trim() : "";
-  const label = typeof body?.label === "string" ? body.label.trim() : "";
-  const userNote = typeof body?.note === "string" ? body.note.trim() : "";
-
-  if (!type) {
-    throw createError({ statusCode: 400, statusMessage: "Action type is required." });
+  const parsed = z
+    .object({
+      stepIndex: z.coerce.number().int().min(0),
+      type: z.string().trim().min(1, "Action type is required."),
+      label: z.string().trim().optional(),
+      note: z.string().trim().optional(),
+    })
+    .safeParse(body);
+  if (!parsed.success) {
+    throw createError({ statusCode: 400, statusMessage: parsed.error.issues[0]?.message ?? "Invalid request body." });
   }
+  const { stepIndex, type, label, note: userNote } = parsed.data;
 
   const levelContent = run.level.content as any;
   const step = levelContent?.steps?.[stepIndex];
   if (!step) {
     throw createError({ statusCode: 400, statusMessage: "Invalid step." });
+  }
+  const allowed = Array.isArray(step?.actions)
+    ? step.actions.some((action: any) => action?.type === type)
+    : false;
+  if (!allowed) {
+    throw createError({ statusCode: 400, statusMessage: "Invalid action type for this step." });
+  }
+
+  const existing = await prisma.simAction.findFirst({
+    where: {
+      runId: run.id,
+      stepIndex,
+    },
+    orderBy: { createdAt: "desc" },
+  });
+  if (existing) {
+    throw createError({ statusCode: 409, statusMessage: "Step already submitted for this run." });
   }
 
   const predictionInput = [
@@ -72,6 +97,8 @@ export default defineEventHandler(async (event) => {
     where: { id: run.id },
     data: {
       score: run.score + scoring.score,
+      status: stepIndex >= (levelContent?.steps?.length ?? 1) - 1 ? "completed" : run.status,
+      completedAt: stepIndex >= (levelContent?.steps?.length ?? 1) - 1 ? new Date() : run.completedAt,
     },
   });
 

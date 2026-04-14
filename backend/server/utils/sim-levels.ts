@@ -78,6 +78,37 @@ const LEVELS: SimLevelSeed[] = [
           },
         ],
       },
+      {
+        title: "Follow-up Message from \"IT Support\"",
+        prompt: "A follow-up asks for your MFA code to finalize remediation. What should you do?",
+        email: {
+          from: "it-support@company-security.net",
+          replyTo: "security-response@company-security.net",
+          subject: "Final verification needed to unlock payroll",
+          body:
+            "Thanks for your quick response. Reply with the 6-digit MFA code from your authenticator so we can finalize the account unlock.",
+        },
+        actions: [
+          {
+            type: "report",
+            label: "Report this as social engineering and call IT via service desk",
+            score: 3,
+            feedback: "Correct. Legitimate IT teams should never ask for one-time MFA codes.",
+          },
+          {
+            type: "reply",
+            label: "Reply with the MFA code to speed up the fix",
+            score: -3,
+            feedback: "Critical mistake. Sharing MFA codes enables immediate account takeover.",
+          },
+          {
+            type: "ignore",
+            label: "Ignore the message and take no action",
+            score: -1,
+            feedback: "Safer than sharing codes, but you should still report and verify through official channels.",
+          },
+        ],
+      },
     ],
   },
   {
@@ -119,6 +150,36 @@ const LEVELS: SimLevelSeed[] = [
           },
         ],
       },
+      {
+        title: "Bank Details Sent in Second Email",
+        prompt: "The sender now provides offshore transfer details and asks you to bypass approval due to secrecy.",
+        email: {
+          from: "cfo-office@company.com",
+          subject: "Use this account only - confidential deal",
+          body:
+            "Please skip standard approval workflow. This acquisition is sensitive and must remain confidential until legal sign-off.",
+        },
+        actions: [
+          {
+            type: "report",
+            label: "Pause transfer, trigger BEC process, and require dual authorization",
+            score: 3,
+            feedback: "Correct. High-risk payment requests require independent verification and controls.",
+          },
+          {
+            type: "click",
+            label: "Open attached instructions and process urgently",
+            score: -2,
+            feedback: "Risky. Attackers use urgency plus secrecy to bypass payment safeguards.",
+          },
+          {
+            type: "reply",
+            label: "Reply requesting verbal confirmation from CFO",
+            score: 1,
+            feedback: "Better than processing directly, but official escalation and dual approval is stronger.",
+          },
+        ],
+      },
     ],
   },
   {
@@ -157,6 +218,38 @@ const LEVELS: SimLevelSeed[] = [
             label: "Ignore the email",
             score: -1,
             feedback: "Ignoring can delay important policy updates. Verify safely instead.",
+          },
+        ],
+      },
+      {
+        title: "Reminder with Link to \"View in Browser\"",
+        prompt: "A reminder includes a shortened link and asks for immediate policy acknowledgement.",
+        email: {
+          from: "hr-notify@company-helpdesk.com",
+          subject: "Reminder: policy sign-off pending",
+          body:
+            "Open the policy portal and submit acknowledgement before 5 PM today to avoid access restrictions.",
+          linkText: "Open policy portal",
+          linkUrl: "http://bit.ly/policy-ack-urgent",
+        },
+        actions: [
+          {
+            type: "report",
+            label: "Report message and access HR policy via known intranet URL",
+            score: 3,
+            feedback: "Correct. Use trusted internal URLs instead of shortened links.",
+          },
+          {
+            type: "click",
+            label: "Click link and sign in to complete acknowledgement",
+            score: -2,
+            feedback: "Unsafe. Shortened HTTP links are a common credential phishing technique.",
+          },
+          {
+            type: "ignore",
+            label: "Ignore reminder until tomorrow",
+            score: -1,
+            feedback: "Not ideal. Verify quickly through trusted systems and report suspicious prompts.",
           },
         ],
       },

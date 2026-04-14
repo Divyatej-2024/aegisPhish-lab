@@ -160,6 +160,64 @@ const SCENARIOS: LabScenarioSeed[] = [
       ],
     },
   },
+  {
+    slug: "helpdesk-imposter-reset",
+    title: "Helpdesk Imposter Reset",
+    summary: "Validate identity safely when a caller requests urgent account recovery.",
+    category: "Social Engineering",
+    difficulty: "Advanced",
+    estimatedMinutes: 10,
+    tags: ["helpdesk", "identity", "verification"],
+    type: "email-triage",
+    steps: {
+      intro:
+        "A support ticket email asks for immediate password reset and includes pressure from a fake executive escalation.",
+      artifact: {
+        from: "it-helpdesk@company-supportdesk.com",
+        subject: "Escalated reset request from COO office",
+        ticketId: "HD-99124",
+        body:
+          "Employee is locked out before a board presentation. Reset the account and send temporary credentials to this thread.",
+        escalationNote: "COO notified and waiting",
+      },
+      questions: [
+        {
+          prompt: "Which signal is the highest risk here?",
+          options: [
+            "The message has a ticket id",
+            "The sender uses a lookalike support domain",
+            "The request mentions the COO",
+            "The issue is time-sensitive",
+          ],
+          correctIndex: 1,
+          explanation: "Lookalike domains are common in internal impersonation attacks.",
+        },
+        {
+          prompt: "What should happen before any reset action?",
+          options: [
+            "Send temporary credentials immediately",
+            "Ask for employee birth date over email",
+            "Perform identity verification through approved support workflow",
+            "Forward the ticket to teammates and wait",
+          ],
+          correctIndex: 2,
+          explanation:
+            "Identity proofing via approved channels is mandatory for account recovery actions.",
+        },
+        {
+          prompt: "What is the best escalation path if impersonation is suspected?",
+          options: [
+            "Close the ticket silently",
+            "Escalate to SOC and preserve message evidence",
+            "Reply to sender requesting government ID",
+            "Reset password and force MFA change later",
+          ],
+          correctIndex: 1,
+          explanation: "SOC escalation with evidence preservation improves containment and investigation.",
+        },
+      ],
+    },
+  },
 ];
 
 export const ensureLabScenarios = async () => {

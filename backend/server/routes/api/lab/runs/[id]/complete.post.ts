@@ -1,5 +1,6 @@
 import { createError, readBody } from "h3";
 import prisma from "@aegisPhish-lab/db";
+import { z } from "zod";
 
 import { requireFirebaseUser } from "../../../../../utils/require-firebase-user";
 import { scoreScenario } from "../../../../../utils/lab-scenarios";
@@ -20,13 +21,25 @@ export default defineEventHandler(async (event) => {
   if (!run || run.userId !== user.uid) {
     throw createError({ statusCode: 404, statusMessage: "Run not found." });
   }
+  if (run.status === "completed") {
+    throw createError({ statusCode: 409, statusMessage: "Run is already completed." });
+  }
 
   const body = await readBody(event);
-  const answers = Array.isArray(body?.answers)
-    ? body.answers.map((value: unknown) => Number(value))
-    : [];
+  const parsed = z
+    .object({
+      answers: z.array(z.coerce.number().int().min(0)).default([]),
+    })
+    .safeParse(body);
+  if (!parsed.success) {
+    throw createError({ statusCode: 400, statusMessage: parsed.error.issues[0]?.message ?? "Invalid request body." });
+  }
 
-  const result = scoreScenario(run.scenario.steps as any, answers);
+  const scenarioSteps = run.scenario.steps as any;
+  const questionCount = Array.isArray(scenarioSteps?.questions) ? scenarioSteps.questions.length : 0;
+  const answers = parsed.data.answers.slice(0, questionCount);
+
+  const result = scoreScenario(scenarioSteps, answers);
 
   const updated = await prisma.labRun.update({
     where: { id },

@@ -1,5 +1,6 @@
 import { createError, readBody } from "h3";
 import prisma from "@aegisPhish-lab/db";
+import { z } from "zod";
 
 import { requireFirebaseUser } from "../../../utils/require-firebase-user";
 import { ensureSimLevels } from "../../../utils/sim-levels";
@@ -9,11 +10,16 @@ export default defineEventHandler(async (event) => {
   await ensureSimLevels();
 
   const body = await readBody(event);
-  const slug = typeof body?.slug === "string" ? body.slug.trim() : "";
+  const parsed = z
+    .object({
+      slug: z.string().trim().min(1, "Level slug is required."),
+    })
+    .safeParse(body);
 
-  if (!slug) {
-    throw createError({ statusCode: 400, statusMessage: "Level slug is required." });
+  if (!parsed.success) {
+    throw createError({ statusCode: 400, statusMessage: parsed.error.issues[0]?.message ?? "Invalid request body." });
   }
+  const slug = parsed.data.slug;
 
   const level = await prisma.simLevel.findUnique({ where: { slug } });
   if (!level) {

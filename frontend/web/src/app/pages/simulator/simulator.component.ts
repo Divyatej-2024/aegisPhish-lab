@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { Component, computed, signal } from "@angular/core";
 
-import { apiFetch } from "../../lib/api";
+import { ApiError, apiFetchJson } from "../../lib/api";
 
 @Component({
   selector: "app-simulator",
@@ -432,15 +432,7 @@ export class SimulatorComponent {
     this.error.set(null);
 
     try {
-      const response = await apiFetch("/api/sim/levels");
-      if (!response.ok) {
-        const message = await response.text();
-        this.error.set(message || "Unable to load levels.");
-        this.levels.set([]);
-        return;
-      }
-
-      const payload = await response.json();
+      const payload = await apiFetchJson<{ levels?: any[] }>("/api/sim/levels");
       this.levels.set(payload.levels ?? []);
     } catch (err) {
       this.error.set(err instanceof Error ? err.message : "Unable to load levels.");
@@ -452,9 +444,7 @@ export class SimulatorComponent {
 
   async loadAnalysis() {
     try {
-      const response = await apiFetch("/api/sim/analysis");
-      if (!response.ok) return;
-      const payload = await response.json();
+      const payload = await apiFetchJson<{ summary?: any }>("/api/sim/analysis");
       this.analysis.set(payload.summary ?? null);
     } catch {
       this.analysis.set(null);
@@ -476,26 +466,22 @@ export class SimulatorComponent {
     this.error.set(null);
 
     try {
-      const response = await apiFetch("/api/sim/runs", {
+      const payload = await apiFetchJson<{ level?: any; run?: { id?: string; score?: number } }>("/api/sim/runs", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ slug: this.selected()?.slug }),
       });
 
-      if (!response.ok) {
-        const message = await response.text();
-        this.error.set(message || "Unable to start level.");
-        return;
-      }
-
-      const payload = await response.json();
       this.activeLevel.set(payload.level);
       this.runId.set(payload.run?.id ?? null);
       this.stepIndex.set(0);
       this.actionResult.set(null);
       this.runScore.set(payload.run?.score ?? 0);
     } catch (err) {
-      this.error.set(err instanceof Error ? err.message : "Unable to start level.");
+      if (err instanceof ApiError && err.status === 401) {
+        this.error.set("Session expired. Please sign in again.");
+      } else {
+        this.error.set(err instanceof Error ? err.message : "Unable to start level.");
+      }
     } finally {
       this.starting.set(false);
     }
@@ -507,9 +493,8 @@ export class SimulatorComponent {
     this.error.set(null);
 
     try {
-      const response = await apiFetch(`/api/sim/runs/${this.runId()}/actions`, {
+      const payload = await apiFetchJson<{ action?: any; run?: { score?: number } }>(`/api/sim/runs/${this.runId()}/actions`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           stepIndex: this.stepIndex(),
           type,
@@ -517,18 +502,17 @@ export class SimulatorComponent {
         }),
       });
 
-      if (!response.ok) {
-        const message = await response.text();
-        this.error.set(message || "Unable to submit action.");
-        return;
-      }
-
-      const payload = await response.json();
       this.actionResult.set(payload.action);
       this.runScore.set(payload.run?.score ?? this.runScore());
       await this.loadAnalysis();
     } catch (err) {
-      this.error.set(err instanceof Error ? err.message : "Unable to submit action.");
+      if (err instanceof ApiError && err.status === 409) {
+        this.error.set("This step is already submitted. Continue to next step or restart.");
+      } else if (err instanceof ApiError && err.status === 401) {
+        this.error.set("Session expired. Please sign in again.");
+      } else {
+        this.error.set(err instanceof Error ? err.message : "Unable to submit action.");
+      }
     } finally {
       this.acting.set(false);
     }

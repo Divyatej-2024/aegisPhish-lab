@@ -3,7 +3,7 @@ import { Component, computed, signal } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 
 import { env } from "@aegisPhish-lab/env/web";
-import { apiFetch } from "../../lib/api";
+import { ApiError, apiFetchJson } from "../../lib/api";
 
 @Component({
   selector: "app-reports",
@@ -170,18 +170,14 @@ export class ReportsComponent {
     this.error.set(null);
 
     try {
-      const response = await apiFetch("/api/phish/campaigns");
-      if (!response.ok) {
-        const message = await response.text();
-        this.error.set(message || "Failed to load campaigns.");
-        this.campaignsData.set([]);
-        return;
-      }
-
-      const payload = await response.json();
+      const payload = await apiFetchJson<{ campaigns?: any[] }>("/api/phish/campaigns");
       this.campaignsData.set(payload.campaigns ?? []);
     } catch (err) {
-      this.error.set(err instanceof Error ? err.message : "Failed to load campaigns.");
+      if (err instanceof ApiError && err.status === 403) {
+        this.error.set("Admin access is required to view campaigns.");
+      } else {
+        this.error.set(err instanceof Error ? err.message : "Failed to load campaigns.");
+      }
       this.campaignsData.set([]);
     } finally {
       this.loading.set(false);
@@ -198,9 +194,8 @@ export class ReportsComponent {
     this.createError.set(null);
 
     try {
-      const response = await apiFetch("/api/phish/campaigns", {
+      const payload = await apiFetchJson<{ targets?: any[] }>("/api/phish/campaigns", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: this.newName.trim(),
           description: this.newDescription.trim(),
@@ -209,13 +204,6 @@ export class ReportsComponent {
         }),
       });
 
-      if (!response.ok) {
-        const message = await response.text();
-        this.createError.set(message || "Unable to create campaign.");
-        return;
-      }
-
-      const payload = await response.json();
       this.createdTargets.set(payload.targets ?? []);
       this.newName = "";
       this.newDescription = "";
@@ -223,7 +211,11 @@ export class ReportsComponent {
       this.newTargets = "";
       await this.loadCampaigns();
     } catch (err) {
-      this.createError.set(err instanceof Error ? err.message : "Unable to create campaign.");
+      if (err instanceof ApiError && err.status === 403) {
+        this.createError.set("Admin access is required to create campaigns.");
+      } else {
+        this.createError.set(err instanceof Error ? err.message : "Unable to create campaign.");
+      }
     } finally {
       this.creating.set(false);
     }

@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { Component, computed, signal } from "@angular/core";
 
-import { apiFetch } from "../../lib/api";
+import { ApiError, apiFetchJson } from "../../lib/api";
 
 @Component({
   selector: "app-training",
@@ -426,15 +426,7 @@ export class TrainingComponent {
     this.error.set(null);
 
     try {
-      const response = await apiFetch("/api/lab/scenarios");
-      if (!response.ok) {
-        const message = await response.text();
-        this.error.set(message || "Unable to load scenarios.");
-        this.scenarios.set([]);
-        return;
-      }
-
-      const payload = await response.json();
+      const payload = await apiFetchJson<{ scenarios?: any[] }>("/api/lab/scenarios");
       this.scenarios.set(payload.scenarios ?? []);
     } catch (err) {
       this.error.set(err instanceof Error ? err.message : "Unable to load scenarios.");
@@ -458,19 +450,11 @@ export class TrainingComponent {
     this.starting.set(true);
 
     try {
-      const response = await apiFetch("/api/lab/runs", {
+      const payload = await apiFetchJson<{ scenario?: any; run?: { id?: string } }>("/api/lab/runs", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ slug: this.selected()?.slug }),
       });
 
-      if (!response.ok) {
-        const message = await response.text();
-        this.error.set(message || "Unable to start scenario.");
-        return;
-      }
-
-      const payload = await response.json();
       this.activeScenario.set(payload.scenario);
       this.runId.set(payload.run?.id ?? null);
       this.answers.set(
@@ -480,7 +464,11 @@ export class TrainingComponent {
       );
       this.result.set(null);
     } catch (err) {
-      this.error.set(err instanceof Error ? err.message : "Unable to start scenario.");
+      if (err instanceof ApiError && err.status === 401) {
+        this.error.set("Session expired. Please sign in again.");
+      } else {
+        this.error.set(err instanceof Error ? err.message : "Unable to start scenario.");
+      }
     } finally {
       this.starting.set(false);
     }
@@ -507,22 +495,20 @@ export class TrainingComponent {
     this.submitting.set(true);
 
     try {
-      const response = await apiFetch(`/api/lab/runs/${this.runId()}/complete`, {
+      const payload = await apiFetchJson<{ result?: any }>(`/api/lab/runs/${this.runId()}/complete`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ answers: this.answers() }),
       });
 
-      if (!response.ok) {
-        const message = await response.text();
-        this.error.set(message || "Unable to submit answers.");
-        return;
-      }
-
-      const payload = await response.json();
       this.result.set(payload.result);
     } catch (err) {
-      this.error.set(err instanceof Error ? err.message : "Unable to submit answers.");
+      if (err instanceof ApiError && err.status === 409) {
+        this.error.set("This run is already completed. Start a new scenario.");
+      } else if (err instanceof ApiError && err.status === 401) {
+        this.error.set("Session expired. Please sign in again.");
+      } else {
+        this.error.set(err instanceof Error ? err.message : "Unable to submit answers.");
+      }
     } finally {
       this.submitting.set(false);
     }

@@ -2,7 +2,17 @@ import { env } from "@aegisPhish-lab/env/web";
 
 import { getIdToken } from "./firebase-auth";
 
-const API_BASE = env.VITE_SERVER_URL || "";
+const normalizeBaseUrl = (value: string) => value.replace(/\/+$/, "");
+
+const resolveApiBase = () => {
+  const candidate = env.VITE_SERVER_URL?.trim() ?? "";
+  if (!candidate || /^%[A-Z0-9_]+%$/i.test(candidate) || /^\$\{[A-Z0-9_]+\}$/i.test(candidate)) {
+    return "";
+  }
+  return normalizeBaseUrl(candidate);
+};
+
+const API_BASE = resolveApiBase();
 const DEFAULT_TIMEOUT_MS = 15000;
 
 export class ApiError extends Error {
@@ -35,7 +45,8 @@ export const apiFetch = async (input: string, init: RequestInit = {}) => {
   }
 
   try {
-    return await fetch(`${API_BASE}${input}`, {
+    const path = input.startsWith("/") ? input : `/${input}`;
+    return await fetch(`${API_BASE}${path}`, {
       ...init,
       headers,
       cache: "no-store",

@@ -13,7 +13,16 @@ const runtimeEnv: Record<string, string | undefined> = isBrowser
   ? window.__env ?? {}
   : {};
 
-const readEnv = (key: string, fallback = "") => runtimeEnv[key] ?? fallback;
+const isUnresolvedPlaceholder = (value: string) =>
+  /^%[A-Z0-9_]+%$/i.test(value) || /^\$\{[A-Z0-9_]+\}$/i.test(value);
+
+const readEnv = (key: string, fallback = "") => {
+  const raw = runtimeEnv[key];
+  if (typeof raw !== "string") return fallback;
+  const value = raw.trim();
+  if (!value || isUnresolvedPlaceholder(value)) return fallback;
+  return value;
+};
 
 export const env = {
   NEXT_PUBLIC_API_URL: readEnv("NEXT_PUBLIC_API_URL"),

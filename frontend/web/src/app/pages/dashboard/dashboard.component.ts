@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { Component, signal } from "@angular/core";
 
-import { apiFetch } from "../../lib/api";
+import { ApiError, apiFetchJson } from "../../lib/api";
 
 @Component({
   selector: "app-dashboard",
@@ -45,24 +45,31 @@ import { apiFetch } from "../../lib/api";
           {{ formatDate(summary()?.lastActivity) }}
         </p>
       </div>
+
+      <p class="mt-4 text-sm text-red-600" *ngIf="error()">{{ error() }}</p>
     </section>
   `,
 })
 export class DashboardComponent {
   readonly summary = signal<any | null>(null);
+  readonly error = signal<string | null>(null);
 
   constructor() {
     void this.loadSummary();
   }
 
   async loadSummary() {
+    this.error.set(null);
     try {
-      const response = await apiFetch("/api/me/summary");
-      if (!response.ok) return;
-      const payload = await response.json();
+      const payload = await apiFetchJson<{ summary?: any }>("/api/me/summary");
       this.summary.set(payload.summary ?? null);
-    } catch {
+    } catch (err) {
       this.summary.set(null);
+      if (err instanceof ApiError && err.status === 401) {
+        this.error.set("Session expired. Please sign in again.");
+        return;
+      }
+      this.error.set("Unable to load dashboard summary.");
     }
   }
 

@@ -1,0 +1,34 @@
+enum AlertSeverity {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum AlertStatus {
+  OPEN
+  INVESTIGATING
+  RESOLVED
+}
+
+model Alert {
+  id                String        @id @map("_id")
+  timestamp         DateTime      @default(now())
+  severity          AlertSeverity
+  eventType         String
+  userId            String?
+  user              String?
+  source            String
+  description       String
+  confidence        Float
+  reasons           Json
+  recommendedAction String
+  status            AlertStatus   @default(OPEN)
+  actionsTaken      Json
+  correlationId     String?
+  mitreTechnique    String
+
+  @@index([timestamp])
+  @@index([severity])
+  @@index([userId, timestamp])
+  @@map("alerts")
+}

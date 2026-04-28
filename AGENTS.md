@@ -45,11 +45,16 @@ aegisPhish-lab/
 |-- backend/
 |   |-- server/      # Backend API
 |-- ai/              # AI component (shared logic)
+|-- logs/            # SIEM-style alert logs (JSONL)
 |-- packages/
 |   |-- auth/        # Authentication
 |   |-- config/      # Shared configs
 |   |-- db/          # Database schema
 |   |-- env/         # Environment validation
+|-- backend/
+|   |-- server/
+|   |   |-- alerts/    # SOC alert generation, logging, correlation
+|   |   |-- incidents/ # Incident response workflow logic
 ```
 
 ## Common Commands

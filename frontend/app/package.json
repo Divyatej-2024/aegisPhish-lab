@@ -2,6 +2,7 @@
   "name": "@aegisphish-lab/frontend",
   "private": true,
   "version": "0.1.0",
+  "packageManager": "pnpm@10.0.0",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

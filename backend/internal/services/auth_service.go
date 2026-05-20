@@ -37,27 +37,25 @@ type RegisterRequest struct {
 	OrgID     string `json:"organization_id" binding:"required"`
 }
 
-func (s *AuthService) Register(req *RegisterRequest) (*models.User, error) {
+func (s *AuthService) Register(req *RegisterRequest) (*LoginResponse, error) {
 	// Check if user already exists
 	existingUser, _ := s.userRepo.GetByEmail(req.Email)
 	if existingUser != nil {
 		return nil, ErrUserAlreadyExists
 	}
 
-	// Hash password
 	hashedPassword, err := utils.HashPassword(req.Password)
 	if err != nil {
 		return nil, err
 	}
 
-	// Create user
 	user := &models.User{
 		Email:          req.Email,
 		PasswordHash:   hashedPassword,
 		FirstName:      req.FirstName,
 		LastName:       req.LastName,
 		OrganizationID: req.OrgID,
-		Role:           "employee", // Default role
+		Role:           "employee",
 		IsActive:       true,
 	}
 
@@ -65,7 +63,21 @@ func (s *AuthService) Register(req *RegisterRequest) (*models.User, error) {
 		return nil, err
 	}
 
-	return user, nil
+	accessToken, err := utils.GenerateJWT(user.ID, user.Email, user.Role, user.OrganizationID, s.secretKey)
+	if err != nil {
+		return nil, err
+	}
+
+	refreshToken, err := utils.GenerateRefreshToken(user.ID, s.secretKey)
+	if err != nil {
+		return nil, err
+	}
+
+	return &LoginResponse{
+		AccessToken:  accessToken,
+		RefreshToken: refreshToken,
+		User:         user,
+	}, nil
 }
 
 func (s *AuthService) Login(email, password string) (*LoginResponse, error) {

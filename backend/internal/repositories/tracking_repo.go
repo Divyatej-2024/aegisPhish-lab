@@ -46,3 +46,22 @@ func (r *TrackingEventRepository) GetCampaignStats(campaignID string) (map[strin
 
 	return stats, nil
 }
+
+func (r *TrackingEventRepository) CountByOrganization(orgID string) (map[string]int64, error) {
+	stats := make(map[string]int64)
+	events := []string{"open", "click", "submit"}
+
+	for _, eventType := range events {
+		var count int64
+		err := r.db.Model(&models.TrackingEvent{}).
+			Joins("JOIN campaigns ON campaigns.id = tracking_events.campaign_id").
+			Where("campaigns.organization_id = ? AND tracking_events.event_type = ?", orgID, eventType).
+			Count(&count).Error
+		if err != nil {
+			return nil, err
+		}
+		stats[eventType] = count
+	}
+
+	return stats, nil
+}

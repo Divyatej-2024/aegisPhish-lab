@@ -4,48 +4,42 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/joho/godotenv"
 )
 
 type Config struct {
-	// Server
-	ServerPort string
-	ServerEnv  string
-
-	// Database
-	DatabaseURL string
-
-	// JWT
-	JWTSecret string
-
-	// CORS
-	CORSOrigins []string
-
-	// Email
-	EmailFrom string
-	SMTPHost  string
-	SMTPPort  int
-	SMTPUser  string
-	SMTPPass  string
+	ServerPort       string
+	ServerEnv        string
+	DatabaseURL      string
+	RedisURL         string
+	JWTSecret        string
+	CORSOrigins      []string
+	EmailFrom        string
+	SMTPHost         string
+	SMTPPort         int
+	SMTPUser         string
+	SMTPPass         string
+	CacheTTLSeconds  int
 }
 
 func Load() *Config {
 	_ = godotenv.Load()
 
 	return &Config{
-		ServerPort:  getEnv("PORT", "8080"),
-		ServerEnv:   getEnv("ENVIRONMENT", "development"),
-		DatabaseURL: getEnv("DATABASE_URL", ""),
-		JWTSecret:   getEnv("JWT_SECRET", "your-super-secret-key-change-in-production"),
-		CORSOrigins: []string{
-			getEnv("FRONTEND_URL", "http://localhost:3000"),
-		},
-		EmailFrom: getEnv("EMAIL_FROM", "noreply@aegisphish.com"),
-		SMTPHost:  getEnv("SMTP_HOST", "smtp.gmail.com"),
-		SMTPPort:  getEnvInt("SMTP_PORT", 587),
-		SMTPUser:  getEnv("SMTP_USER", ""),
-		SMTPPass:  getEnv("SMTP_PASS", ""),
+		ServerPort:      getEnv("PORT", "8080"),
+		ServerEnv:       getEnv("ENVIRONMENT", "development"),
+		DatabaseURL:     getEnv("DATABASE_URL", ""),
+		RedisURL:        getEnv("REDIS_URL", "redis://localhost:6379/0"),
+		JWTSecret:       getEnv("JWT_SECRET", "your-super-secret-jwt-key-change-in-production"),
+		CORSOrigins:     parseCommaSeparated(getEnv("CORS_ORIGINS", getEnv("FRONTEND_URL", "http://localhost:3000"))),
+		EmailFrom:       getEnv("EMAIL_FROM", "noreply@aegisphish.com"),
+		SMTPHost:        getEnv("SMTP_HOST", "smtp.gmail.com"),
+		SMTPPort:        getEnvInt("SMTP_PORT", 587),
+		SMTPUser:        getEnv("SMTP_USER", ""),
+		SMTPPass:        getEnv("SMTP_PASS", ""),
+		CacheTTLSeconds: getEnvInt("CACHE_TTL_SECONDS", 300),
 	}
 }
 
@@ -62,6 +56,18 @@ func getEnvInt(key string, defaultVal int) int {
 		return val
 	}
 	return defaultVal
+}
+
+func parseCommaSeparated(value string) []string {
+	if value == "" {
+		return []string{}
+	}
+
+	parts := strings.Split(value, ",")
+	for i, part := range parts {
+		parts[i] = strings.TrimSpace(part)
+	}
+	return parts
 }
 
 func (c *Config) GetDSN() string {

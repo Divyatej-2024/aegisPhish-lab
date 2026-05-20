@@ -4,20 +4,19 @@ node_modules
 .pnp.js
 
 # Build outputs
+.next
+.out
 dist
 build
 *.tsbuildinfo
 
-# Environment variables
+# Environment files
 .env
+.env.*
 .env*.local
 
-# IDEs and editors
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+# IDE files
+.vscode
 .idea
 *.swp
 *.swo
@@ -36,15 +35,17 @@ lerna-debug.log*
 # Turbo
 .turbo
 
-# Better Fullstack
-.alchemy
+# Database
+*.sqlite
 
-# Testing
+# Docker
+docker-compose.override.yml
+
+# Generated files
 coverage
 .nyc_output
-
-# Misc
-*.tgz
 .cache
-tmp
 temp
+
+# OS
+Thumbs.db

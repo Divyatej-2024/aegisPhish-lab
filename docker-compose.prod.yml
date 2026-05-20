@@ -9,7 +9,8 @@ services:
       ENVIRONMENT: production
       DATABASE_URL: ${DATABASE_URL}
       JWT_SECRET: ${JWT_SECRET}
-      FRONTEND_URL: ${FRONTEND_URL}
+      CORS_ORIGINS: ${CORS_ORIGINS}
+      REDIS_URL: ${REDIS_URL}
     expose:
       - "8080"
     healthcheck:
@@ -26,7 +27,7 @@ services:
   aegisphish-frontend:
     build:
       context: .
-      dockerfile: web/Dockerfile
+      dockerfile: frontend/app/Dockerfile
     image: aegisphish-frontend:latest
     environment:
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}

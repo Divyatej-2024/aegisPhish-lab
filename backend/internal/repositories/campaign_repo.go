@@ -53,3 +53,19 @@ func (r *CampaignRepository) ListByStatus(orgID, status string) ([]models.Campai
 		Find(&campaigns).Error
 	return campaigns, err
 }
+
+func (r *CampaignRepository) CountByOrganization(orgID string) (int64, error) {
+	var count int64
+	err := r.db.Model(&models.Campaign{}).
+		Where("organization_id = ?", orgID).
+		Count(&count).Error
+	return count, err
+}
+
+func (r *CampaignRepository) CountByStatus(orgID, status string) (int64, error) {
+	var count int64
+	err := r.db.Model(&models.Campaign{}).
+		Where("organization_id = ? AND status = ?", orgID, status).
+		Count(&count).Error
+	return count, err
+}

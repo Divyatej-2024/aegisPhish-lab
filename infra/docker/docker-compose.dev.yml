@@ -1,0 +1,50 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: aegisphish
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    ports:
+      - '5432:5432'
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - '6379:6379'
+
+  backend:
+    build:
+      context: ../
+      dockerfile: infra/docker/Dockerfile.backend
+    environment:
+      PORT: 8080
+      ENVIRONMENT: development
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/aegisphish
+      JWT_SECRET: development-jwt-secret
+      CORS_ORIGINS: http://localhost:3000
+      REDIS_URL: redis://redis:6379/0
+    ports:
+      - '8080:8080'
+    depends_on:
+      - postgres
+      - redis
+
+  frontend:
+    build:
+      context: ../
+      dockerfile: infra/docker/Dockerfile.frontend
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8080/api
+    ports:
+      - '3000:3000'
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:

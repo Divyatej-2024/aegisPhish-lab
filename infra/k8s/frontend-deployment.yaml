@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aegisphish-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: aegisphish-frontend
+  template:
+    metadata:
+      labels:
+        app: aegisphish-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: aegisphish-frontend:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: NEXT_PUBLIC_API_URL
+              value: https://api.yourdomain.com/api
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 20
+            periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aegisphish-frontend
+spec:
+  selector:
+    app: aegisphish-frontend
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000

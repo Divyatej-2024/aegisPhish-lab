@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aegisphish-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: aegisphish-backend
+  template:
+    metadata:
+      labels:
+        app: aegisphish-backend
+    spec:
+      containers:
+        - name: backend
+          image: aegisphish-backend:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: aegisphish-db-secret
+                  key: database_url
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: aegisphish-secrets
+                  key: jwt_secret
+            - name: REDIS_URL
+              value: redis://aegisphish-redis:6379/0
+            - name: CORS_ORIGINS
+              value: https://your-frontend.example.com
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aegisphish-backend
+spec:
+  selector:
+    app: aegisphish-backend
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080

@@ -23,7 +23,7 @@ func (h *AuthHandler) Register(c *gin.Context) {
 		return
 	}
 
-	user, err := h.authService.Register(&req)
+	response, err := h.authService.Register(&req)
 	if err != nil {
 		if err == services.ErrUserAlreadyExists {
 			utils.RespondError(c, http.StatusConflict, "User already exists", "", nil)
@@ -33,7 +33,7 @@ func (h *AuthHandler) Register(c *gin.Context) {
 		return
 	}
 
-	utils.RespondSuccess(c, http.StatusCreated, "User registered successfully", user)
+	utils.RespondSuccess(c, http.StatusCreated, "User registered successfully", response)
 }
 
 func (h *AuthHandler) Login(c *gin.Context) {

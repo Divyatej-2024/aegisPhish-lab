@@ -2,161 +2,137 @@
 
 **Human Attack Surface Training Platform**
 
-A production-grade, cloud-native cybersecurity awareness and phishing simulation platform designed for universities, SMEs, and enterprise security teams.
-
-## 🎯 Overview
-
-Aegis Phish Lab is a comprehensive phishing awareness platform that enables organizations to:
-
-- 📧 Create and manage phishing simulation campaigns
-- 📊 Track user interactions in real-time
-- 📈 Measure security awareness with detailed analytics
-- 👥 Manage departments, teams, and individual users
-- 🎓 Train employees with realistic phishing scenarios
-- 📋 Generate compliance reports and metrics
-
-## 🏗️ Tech Stack
-
-**Frontend:**
-- Next.js 15, TypeScript, TailwindCSS
-- React Query, Zustand, Framer Motion
-- Recharts, shadcn/ui components
-- Axios HTTP client
-
-**Backend:**
-- Go 1.23, Gin Web Framework
-- GORM ORM, PostgreSQL database
-- JWT authentication, RBAC
-- Clean Architecture pattern
-
-**Database:**
-- PostgreSQL 13+ (Supabase compatible)
-
-**Deployment:**
-- Docker & Docker Compose
-- Vercel (Frontend), Render/Railway (Backend)
-- GitHub Actions CI/CD
-- CircleCI integration
-    "legit": 0.16
-  },
-  "reasons": [
-    {
-      "code": "unsafe-http-link",
-      "message": "Unsafe HTTP links can expose credentials through insecure transport.",
-      "evidence": "http://",
-      "weight": 0.2
-    },
-    {
-      "code": "urgency",
-      "message": "Urgency language increases pressure on the victim.",
-      "evidence": "urgent",
-      "weight": 0.08
-    }
-  ],
-  "model": "heuristic-v1",
-  "source": "heuristic"
-}
-```
-
-## System Architecture
-
-```mermaid
-flowchart TD
-    A[Angular Frontend\nfrontend/web] --> B[Nitro API\nbackend/server]
-    B --> C[Detection Engine\nml-client.ts]
-    C --> D{ML_SERVER_URL configured?}
-    D -->|Yes| E[External ML /predict]
-    D -->|No| F[Heuristic Engine]
-    B --> G[Prisma ORM\npackages/db]
-    G --> H[(MongoDB)]
-    B --> I[Firebase Token Verification]
-    B --> J[Simulation Engine\n/api/sim/*]
-    J --> H
-```
-
-## Tech Stack
-
-- Frontend: Angular 19, Tailwind CSS, daisyUI
-- Backend: Nitro (h3), Zod
-- Database: MongoDB, Prisma
-- Auth: Firebase ID token verification + Better Auth package in workspace
-- Testing: Vitest
-- Monorepo tooling: Turbo, pnpm, Bun runtime support
+Aegis Phish Lab is a production-grade cybersecurity awareness SaaS monorepo for local development and cloud deployment.
 
 ## Monorepo Structure
 
 ```text
-aegisPhish-lab/
-|-- frontend/
-|   |-- web/         # Angular app
-|-- backend/
-|   |-- server/      # Nitro API
-|-- ai/              # AI package surface
-|-- packages/
-|   |-- auth/        # auth package
-|   |-- config/      # shared config
-|   |-- db/          # Prisma schema + seed
-|   |-- env/         # environment validation
+aegis-phish-lab/
+├── frontend/
+│   └── app/                 # Next.js frontend package
+├── backend/                 # Go Gin backend service
+├── infra/                   # Docker, NGINX, and Kubernetes manifests
+├── docs/                    # Architecture and deployment documentation
+├── .github/                 # CI/CD workflows
+├── docker-compose.yml       # Local development stack definition
+├── docker-compose.prod.yml  # Production container stack definition
+└── README.md                # Project overview and setup
 ```
 
-## Quick Start
+## Tech Stack
 
-1. Install dependencies
+### Frontend
+- Next.js 15 with App Router
+- TypeScript
+- TailwindCSS
+- shadcn-style UI components
+- Framer Motion
+- Zustand
+- React Query
+- Axios
+
+### Backend
+- Go 1.23
+- Gin framework
+- GORM ORM
+- PostgreSQL
+- JWT authentication
+- Redis-ready cache architecture
+- Clean architecture layers
+
+### Database
+- PostgreSQL
+- Supabase compatible
+- Models for users, organizations, departments, campaigns, and tracking events
+
+### Deployment
+- Docker Compose local deployment
+- Frontend deployable to Vercel
+- Backend deployable to Render / Railway
+- Kubernetes manifests in `infra/k8s`
+- GitHub Actions CI/CD
+
+## Core Features
+
+- Authentication: register, login, logout
+- JWT tokens with bcrypt password hashing
+- Protected API routes and RBAC roles
+- Organization and department management
+- Campaign creation, scheduling, updating, and deletion
+- Tracking of opens, clicks, IP address, user agent, and timestamps
+- Admin dashboards and campaign statistics
+- Secure CORS and headers
+- Rate limiting and input validation
+
+## Local Development
+
+### Prerequisites
+
+- Node.js 20+
+- pnpm 10+
+- Go 1.23+
+- Docker
+
+### Install dependencies
 
 ```bash
 pnpm install
 ```
 
-2. Configure backend environment in `backend/server/.env`
-
-Required at minimum:
+### Configure environment
 
 ```bash
-MONGODB_URI=...
-FIREBASE_PROJECT_ID=...
-FIREBASE_CLIENT_EMAIL=...
-FIREBASE_PRIVATE_KEY=...
+cp backend/.env.example backend/.env
+cp frontend/app/.env.local.example frontend/app/.env.local
 ```
 
-Optional (for external model):
+### Start local stack
 
 ```bash
-ML_SERVER_URL=http://localhost:8000
+docker-compose up -d
 ```
 
-3. Prepare database
+### Access services
 
-```bash
-pnpm db:push
-pnpm db:seed
-```
+- Frontend: `http://localhost:3000`
+- Backend API: `http://localhost:8080/api`
 
-4. Run development stack
+## Backend API Endpoints
 
-```bash
-pnpm dev
-```
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+- `POST /api/auth/logout`
+- `GET /api/users`
+- `GET /api/users/:id`
+- `PUT /api/users/:id`
+- `DELETE /api/users/:id`
+- `GET /api/organizations`
+- `POST /api/organizations`
+- `GET /api/organizations/:id`
+- `GET /api/organizations/:id/departments`
+- `POST /api/organizations/:id/departments`
+- `GET /api/campaigns`
+- `POST /api/campaigns`
+- `GET /api/campaigns/:id`
+- `PUT /api/campaigns/:id`
+- `DELETE /api/campaigns/:id`
+- `GET /api/campaigns/:id/stats`
+- `POST /api/tracking`
+- `GET /api/dashboard/overview`
 
-Default local URLs:
+## Deployment
 
-- Frontend: `http://localhost:3001`
-- Backend API: `http://localhost:3000`
+- Local: `docker-compose up -d`
+- Developer Docker stack: `infra/docker/docker-compose.dev.yml`
+- Kubernetes: manifests under `infra/k8s`
+- CI: `.github/workflows/ci.yml`
+- Deploy: `.github/workflows/deploy.yml`
 
-## Key Routes
+## Documentation
 
-- `GET /demo` - read-only product demo
-- `GET /simulator` - interactive phishing walkthrough simulator (authenticated)
-- `POST /api/predict` - phishing prediction API (authenticated)
-- `GET /api/sim/levels` - simulator levels
-- `POST /api/sim/runs` - start simulation run
-- `POST /api/sim/runs/:id/actions` - submit action and receive detection + feedback
+- `docs/ARCHITECTURE.md`
+- `docs/DEPLOYMENT.md`
 
-## Portfolio Positioning
+## Notes
 
-This project is best presented as:
-
-- A phishing readiness platform
-- With explainable detection output
-- Plus user behavior simulation and measurable risk metrics
-
-If you are using this for interviews, show the simulator flow live and explain how detection reasons map to user coaching decisions.
+This repository is designed for scalable SaaS development with environment-driven configuration, modular code structure, and secure production defaults.

@@ -1,53 +1,42 @@
-# AegisPhish Lab
+# Aegis Phish Lab
 
-AegisPhish Lab is a phishing detection and simulation platform built for security awareness teams and SOC-style workflows.
-It combines explainable phishing analysis, realistic phishing simulations, and readiness reporting in one stack.
+**Human Attack Surface Training Platform**
 
-## Why This Project Matters
+A production-grade, cloud-native cybersecurity awareness and phishing simulation platform designed for universities, SMEs, and enterprise security teams.
 
-Most phishing demos stop at a UI mock. AegisPhish Lab focuses on operational signals:
+## 🎯 Overview
 
-- Detection output with confidence and explicit reasons
-- Scenario-based phishing simulations with scored user actions
-- Campaign and user-risk data that can be used for coaching and reporting
+Aegis Phish Lab is a comprehensive phishing awareness platform that enables organizations to:
 
-## Core Capabilities
+- 📧 Create and manage phishing simulation campaigns
+- 📊 Track user interactions in real-time
+- 📈 Measure security awareness with detailed analytics
+- 👥 Manage departments, teams, and individual users
+- 🎓 Train employees with realistic phishing scenarios
+- 📋 Generate compliance reports and metrics
 
-- Email/text phishing analysis API (`/api/predict`, `/ai`)
-- Explainable detection response:
-  - `label` (`phishing` or `legit`)
-  - `confidence` and class probabilities
-  - ranked `reasons` with evidence snippets
-- Phishing walkthrough simulator (`/simulator`):
-  - credential reset scam
-  - executive wire request scam
-  - malicious document-share scam
-- Simulation analytics (`/api/sim/analysis`) with scoring and risky-action rates
-- Campaign and lab endpoints for training and readiness workflows
+## 🏗️ Tech Stack
 
-## Detection Logic (Explainable)
+**Frontend:**
+- Next.js 15, TypeScript, TailwindCSS
+- React Query, Zustand, Framer Motion
+- Recharts, shadcn/ui components
+- Axios HTTP client
 
-The current engine uses a hybrid strategy:
+**Backend:**
+- Go 1.23, Gin Web Framework
+- GORM ORM, PostgreSQL database
+- JWT authentication, RBAC
+- Clean Architecture pattern
 
-1. External ML model (optional)
-- If `ML_SERVER_URL` is configured, the backend calls `POST {ML_SERVER_URL}/predict`.
+**Database:**
+- PostgreSQL 13+ (Supabase compatible)
 
-2. Local heuristic fallback (always available)
-- If the ML server is unavailable, the platform scores suspicious indicators such as:
-  - urgency language (`urgent`, `immediately`)
-  - credential prompts (`password`, `login`, `reset`)
-  - financial fraud cues (`wire`, `invoice`, `payment`)
-  - unsafe links (`http://`)
-  - obfuscated links (shorteners like `bit.ly`)
-
-Example prediction payload:
-
-```json
-{
-  "label": "phishing",
-  "confidence": 0.84,
-  "probabilities": {
-    "phishing": 0.84,
+**Deployment:**
+- Docker & Docker Compose
+- Vercel (Frontend), Render/Railway (Backend)
+- GitHub Actions CI/CD
+- CircleCI integration
     "legit": 0.16
   },
   "reasons": [

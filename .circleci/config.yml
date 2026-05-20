@@ -1,0 +1,70 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@5.0
+  go: circleci/go@1.7
+
+jobs:
+  test-backend:
+    docker:
+      - image: cimg/go:1.23
+    steps:
+      - checkout
+      - go/load-cache
+      - go/mod-download:
+          dir: backend
+      - run:
+          name: Run Backend Tests
+          command: cd backend && go test ./...
+      - go/save-cache:
+          dir: backend
+
+  test-frontend:
+    executor:
+      name: node/default
+      tag: '20'
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: pnpm
+          cache-version: v1
+      - run:
+          name: Run Frontend Tests
+          command: pnpm -F web test
+
+  build-backend:
+    docker:
+      - image: cimg/go:1.23
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build Backend Docker Image
+          command: |
+            docker build -t aegisphish-backend:$CIRCLE_SHA1 -f backend/Dockerfile .
+            docker tag aegisphish-backend:$CIRCLE_SHA1 aegisphish-backend:latest
+
+  build-frontend:
+    executor:
+      name: node/default
+      tag: '20'
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: pnpm
+          cache-version: v1
+      - run:
+          name: Build Frontend
+          command: pnpm -F web build
+
+workflows:
+  test-and-build:
+    jobs:
+      - test-backend
+      - test-frontend
+      - build-backend:
+          requires:
+            - test-backend
+      - build-frontend:
+          requires:
+            - test-frontend

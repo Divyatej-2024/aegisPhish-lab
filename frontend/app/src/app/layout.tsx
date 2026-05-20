@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description: 'Human Attack Surface Training Platform',
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body className="bg-background text-white">

@@ -4,21 +4,25 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"strings"
 	"time"
 
 	"github.com/aegisPhish/backend/internal/config"
-	"github.com/aegisPhish/backend/pkg/cache"
 	"github.com/aegisPhish/backend/internal/handlers"
 	"github.com/aegisPhish/backend/internal/middleware"
 	"github.com/aegisPhish/backend/internal/repositories"
 	"github.com/aegisPhish/backend/internal/routes"
 	"github.com/aegisPhish/backend/internal/services"
+	"github.com/aegisPhish/backend/pkg/cache"
 	"github.com/aegisPhish/backend/pkg/database"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	cfg := config.Load()
+	if len(strings.TrimSpace(cfg.JWTSecret)) < 32 {
+		log.Fatal("JWT_SECRET must be configured with a unique random value of at least 32 characters")
+	}
 
 	db, err := database.InitDatabase(cfg)
 	if err != nil {

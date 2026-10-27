@@ -15,9 +15,12 @@ type Overview = {
 };
 
 export default function DashboardPage() {
-  const { data, isLoading, error } = useQuery<Overview>(['dashboard', 'overview'], async () => {
-    const response = await apiService.getClient().get('/dashboard/overview');
-    return response.data.data;
+  const { data, isLoading, error } = useQuery<Overview>({
+    queryKey: ['dashboard', 'overview'],
+    queryFn: async () => {
+      const response = await apiService.getClient().get('/dashboard/overview');
+      return response.data.data;
+    },
   });
 
   return (

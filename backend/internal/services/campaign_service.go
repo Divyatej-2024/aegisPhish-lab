@@ -78,7 +78,11 @@ func (s *CampaignService) UpdateCampaign(campaign *models.Campaign) error {
 }
 
 func (s *CampaignService) UpdateCampaignForOrganization(campaign *models.Campaign, orgID string) error {
-	return s.campaignRepo.UpdateForOrganization(campaign, orgID)
+	err := s.campaignRepo.UpdateForOrganization(campaign, orgID)
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return ErrCampaignNotFound
+	}
+	return err
 }
 
 func (s *CampaignService) DeleteCampaign(campaignID string) error {
@@ -86,7 +90,11 @@ func (s *CampaignService) DeleteCampaign(campaignID string) error {
 }
 
 func (s *CampaignService) DeleteCampaignForOrganization(campaignID, orgID string) error {
-	return s.campaignRepo.DeleteForOrganization(campaignID, orgID)
+	err := s.campaignRepo.DeleteForOrganization(campaignID, orgID)
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return ErrCampaignNotFound
+	}
+	return err
 }
 
 func (s *CampaignService) ListCampaigns(orgID string) ([]models.Campaign, error) {

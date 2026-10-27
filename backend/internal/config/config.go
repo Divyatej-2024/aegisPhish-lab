@@ -32,7 +32,8 @@ func Load() *Config {
 		ServerEnv:       getEnv("ENVIRONMENT", "development"),
 		DatabaseURL:     getEnv("DATABASE_URL", ""),
 		RedisURL:        getEnv("REDIS_URL", "redis://localhost:6379/0"),
-		JWTSecret:       getEnv("JWT_SECRET", "your-super-secret-jwt-key-change-in-production"),
+		// Never provide a known, shared signing secret as a default.
+		JWTSecret:       getEnv("JWT_SECRET", ""),
 		CORSOrigins:     parseCommaSeparated(getEnv("CORS_ORIGINS", getEnv("FRONTEND_URL", "http://localhost:3000"))),
 		EmailFrom:       getEnv("EMAIL_FROM", "noreply@aegisphish.com"),
 		SMTPHost:        getEnv("SMTP_HOST", "smtp.gmail.com"),
@@ -50,7 +51,7 @@ func getEnv(key, defaultVal string) string {
 	return defaultVal
 }
 
-func getEnvInt(key string, defaultVal int) int {
+func getEnvInt(key, defaultVal string) int {
 	valStr := getEnv(key, "")
 	if val, err := strconv.Atoi(valStr); err == nil {
 		return val

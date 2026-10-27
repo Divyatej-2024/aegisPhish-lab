@@ -21,7 +21,7 @@
     "db:migrate": "turbo -F @aegisPhish-lab/db db:migrate",
     "db:seed": "turbo -F @aegisPhish-lab/db db:seed"
   },
-  "packageManager": "pnpm@10.0.0",
+  "packageManager": "pnpm@10.34.9",
   "dependencies": {
     "@aegisPhish-lab/env": "workspace:*",
     "dotenv": "catalog:",

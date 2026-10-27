@@ -10,7 +10,7 @@ const navItems = [
   { href: '/dashboard', label: 'Dashboard' },
   { href: '/campaigns', label: 'Campaigns' },
   { href: '/users', label: 'Users' },
-];
+] as const;
 
 export function Sidebar({ active }: SidebarProps) {
   return (

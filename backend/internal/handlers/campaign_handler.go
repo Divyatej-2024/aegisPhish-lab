@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 
+	"github.com/aegisPhish/backend/internal/models"
 	"github.com/aegisPhish/backend/internal/services"
 	"github.com/aegisPhish/backend/pkg/utils"
 	"github.com/gin-gonic/gin"
@@ -16,6 +17,16 @@ func NewCampaignHandler(campaignService *services.CampaignService) *CampaignHand
 	return &CampaignHandler{campaignService: campaignService}
 }
 
+// campaignInTenant deliberately returns the same not-found response for missing
+// campaigns and campaigns belonging to another tenant.
+func campaignInTenant(c *gin.Context, campaign *models.Campaign) bool {
+	if campaign == nil || campaign.OrganizationID == "" || campaign.OrganizationID != c.GetString("organization_id") {
+		utils.RespondError(c, http.StatusNotFound, "Campaign not found", "", nil)
+		return false
+	}
+	return true
+}
+
 func (h *CampaignHandler) CreateCampaign(c *gin.Context) {
 	var req services.CreateCampaignRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -25,10 +36,14 @@ func (h *CampaignHandler) CreateCampaign(c *gin.Context) {
 
 	orgID := c.GetString("organization_id")
 	userID := c.GetString("user_id")
+	if orgID == "" || userID == "" {
+		utils.RespondError(c, http.StatusUnauthorized, "Invalid authentication context", "", nil)
+		return
+	}
 
 	campaign, err := h.campaignService.CreateCampaign(orgID, userID, &req)
 	if err != nil {
-		utils.RespondError(c, http.StatusInternalServerError, "Failed to create campaign", err.Error(), nil)
+		utils.RespondError(c, http.StatusInternalServerError, "Failed to create campaign", "", nil)
 		return
 	}
 
@@ -36,15 +51,16 @@ func (h *CampaignHandler) CreateCampaign(c *gin.Context) {
 }
 
 func (h *CampaignHandler) GetCampaign(c *gin.Context) {
-	campaignID := c.Param("id")
-
-	campaign, err := h.campaignService.GetCampaign(campaignID)
+	campaign, err := h.campaignService.GetCampaign(c.Param("id"))
 	if err != nil {
 		if err == services.ErrCampaignNotFound {
 			utils.RespondError(c, http.StatusNotFound, "Campaign not found", "", nil)
 		} else {
-			utils.RespondError(c, http.StatusInternalServerError, "Failed to retrieve campaign", err.Error(), nil)
+			utils.RespondError(c, http.StatusInternalServerError, "Failed to retrieve campaign", "", nil)
 		}
+		return
+	}
+	if !campaignInTenant(c, campaign) {
 		return
 	}
 
@@ -53,58 +69,92 @@ func (h *CampaignHandler) GetCampaign(c *gin.Context) {
 
 func (h *CampaignHandler) ListCampaigns(c *gin.Context) {
 	orgID := c.GetString("organization_id")
-
-	campaigns, err := h.campaignService.ListCampaigns(orgID)
-	if err != nil {
-		utils.RespondError(c, http.StatusInternalServerError, "Failed to retrieve campaigns", err.Error(), nil)
+	if orgID == "" {
+		utils.RespondError(c, http.StatusUnauthorized, "Invalid authentication context", "", nil)
 		return
 	}
 
+	campaigns, err := h.campaignService.ListCampaigns(orgID)
+	if err != nil {
+		utils.RespondError(c, http.StatusInternalServerError, "Failed to retrieve campaigns", "", nil)
+		return
+	}
 	utils.RespondSuccess(c, http.StatusOK, "Campaigns retrieved successfully", campaigns)
 }
 
 func (h *CampaignHandler) UpdateCampaign(c *gin.Context) {
 	campaignID := c.Param("id")
-
 	campaign, err := h.campaignService.GetCampaign(campaignID)
 	if err != nil {
-		utils.RespondError(c, http.StatusNotFound, "Campaign not found", "", nil)
+		if err == services.ErrCampaignNotFound {
+			utils.RespondError(c, http.StatusNotFound, "Campaign not found", "", nil)
+		} else {
+			utils.RespondError(c, http.StatusInternalServerError, "Failed to retrieve campaign", "", nil)
+		}
+		return
+	}
+	if !campaignInTenant(c, campaign) {
 		return
 	}
 
-	if err := c.ShouldBindJSON(&campaign); err != nil {
+	// Never allow request JSON to transfer a campaign to another tenant or
+	// rewrite its creator. Preserve these fields from the persisted record.
+	organizationID := campaign.OrganizationID
+	createdByID := campaign.CreatedByID
+	if err := c.ShouldBindJSON(campaign); err != nil {
 		utils.RespondError(c, http.StatusBadRequest, "Invalid request", err.Error(), nil)
 		return
 	}
-
 	campaign.ID = campaignID
+	campaign.OrganizationID = organizationID
+	campaign.CreatedByID = createdByID
+
 	if err := h.campaignService.UpdateCampaign(campaign); err != nil {
-		utils.RespondError(c, http.StatusInternalServerError, "Failed to update campaign", err.Error(), nil)
+		utils.RespondError(c, http.StatusInternalServerError, "Failed to update campaign", "", nil)
 		return
 	}
-
 	utils.RespondSuccess(c, http.StatusOK, "Campaign updated successfully", campaign)
 }
 
 func (h *CampaignHandler) DeleteCampaign(c *gin.Context) {
-	campaignID := c.Param("id")
-
-	if err := h.campaignService.DeleteCampaign(campaignID); err != nil {
-		utils.RespondError(c, http.StatusInternalServerError, "Failed to delete campaign", err.Error(), nil)
+	campaign, err := h.campaignService.GetCampaign(c.Param("id"))
+	if err != nil {
+		if err == services.ErrCampaignNotFound {
+			utils.RespondError(c, http.StatusNotFound, "Campaign not found", "", nil)
+		} else {
+			utils.RespondError(c, http.StatusInternalServerError, "Failed to retrieve campaign", "", nil)
+		}
+		return
+	}
+	if !campaignInTenant(c, campaign) {
 		return
 	}
 
+	if err := h.campaignService.DeleteCampaign(campaign.ID); err != nil {
+		utils.RespondError(c, http.StatusInternalServerError, "Failed to delete campaign", "", nil)
+		return
+	}
 	utils.RespondSuccess(c, http.StatusOK, "Campaign deleted successfully", nil)
 }
 
 func (h *CampaignHandler) GetCampaignStats(c *gin.Context) {
-	campaignID := c.Param("id")
-
-	stats, err := h.campaignService.GetCampaignStats(campaignID)
+	campaign, err := h.campaignService.GetCampaign(c.Param("id"))
 	if err != nil {
-		utils.RespondError(c, http.StatusInternalServerError, "Failed to retrieve stats", err.Error(), nil)
+		if err == services.ErrCampaignNotFound {
+			utils.RespondError(c, http.StatusNotFound, "Campaign not found", "", nil)
+		} else {
+			utils.RespondError(c, http.StatusInternalServerError, "Failed to retrieve campaign", "", nil)
+		}
+		return
+	}
+	if !campaignInTenant(c, campaign) {
 		return
 	}
 
+	stats, err := h.campaignService.GetCampaignStats(campaign.ID)
+	if err != nil {
+		utils.RespondError(c, http.StatusInternalServerError, "Failed to retrieve stats", "", nil)
+		return
+	}
 	utils.RespondSuccess(c, http.StatusOK, "Campaign stats retrieved successfully", stats)
 }

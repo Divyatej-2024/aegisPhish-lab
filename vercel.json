@@ -1,5 +1,5 @@
 {
-  "installCommand": "corepack enable && pnpm install --no-frozen-lockfile",
+  "installCommand": "corepack prepare pnpm@10.34.9 --activate && pnpm install --no-frozen-lockfile",
   "buildCommand": "pnpm run build",
   "outputDirectory": "frontend/web/dist/web/browser",
   "rewrites": [

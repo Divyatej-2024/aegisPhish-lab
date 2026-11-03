@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [main, production]
+    branches: [master, production]
   pull_request:
-    branches: [main, production]
+    branches: [master, production]
 
 jobs:
   backend:
@@ -19,7 +19,7 @@ jobs:
         run: |
           cd backend
           go mod download
-      - name: Run backend lint and test
+      - name: Run backend tests
         run: |
           cd backend
           go test ./...
@@ -35,7 +35,7 @@ jobs:
       - name: Install dependencies
         run: |
           cd frontend/app
-          npm install
+          npm ci
       - name: Build frontend
         run: |
           cd frontend/app
